@@ -1,6 +1,6 @@
 % THE PROJECT STARTS HERE
 
-start:- carrega('database.bd'),
+start:- carregaDados,
         repeat,
         main_menu,
         pergunta("Digite a Opcao~n",R),
@@ -13,8 +13,7 @@ open_menu(1,A):- repeat,
                 R=5,A is 0,!.
 open_menu(2,A):- repeat,
                 team_menu,
-                pergunta("Digite a Opcao~n",R),
-                R=9,A is 0,!.
+                A is 0,!.
 open_menu(3,A):- repeat,
                 statistics_menu,
                 pergunta("Deseja Sair? [s/n]~n",R),
@@ -26,9 +25,6 @@ open_menu(now,A):- repeat,
                 pergunta("Digite a Opcao~n",R),
                 R=5,A is 0, !.
 
-carrega(Arquivo):-
-        exists_file(Arquivo),
-        consult(Arquivo);true.
 
 main_menu:-
     format('~n*** MENU  *** ~n'),
@@ -57,6 +53,7 @@ gamenow_menu:-
     format('5- SAIR~n~n').
 
 team_menu:-
+    repeat,
     format('~n*** EQUIPAS  *** ~n'),
     format('-------------~n'),
     format('1- CADASTRAR EQUIPA ~n'),
@@ -67,7 +64,31 @@ team_menu:-
     format('6- LISTAR TREINADORES ~n'),
     format('7- LISTAR UMA EQUIPA ~n'),
     format('8- VER PONTUACAO ~n'),
-    format('9- SAIR ~n~n').
+    format('9- SAIR ~n~n'),
+    pergunta("Digite a Opcao~n",R),
+    team_menu_option(R,A),
+    A=1,!.
+
+team_menu_option(9,1).
+team_menu_option(1,A):-format('~n *** CADASTRAR EQUIPA *** ~n'),
+                pergunta("Numero Da Equipa:~n",NUMERO),
+                pergunta("Nome Da Equipa:~n",NOME),
+                pergunta("Data de Fundacao:~n",FUNDACAO),
+                pergunta("Numero de titulos:~n",TITULOS),
+                assertz(equipa(NUMERO,NOME,FUNDACAO,TITULOS)),
+                format('~n ---  EQUIPA ADICIONADA --- ~n'),
+                salva(equipa,'equipas.bd'),
+                A is 0,!.
+team_menu_option(4,A):-format('~n *** LISTA DE EQUIPAS *** ~n'),
+                    listarEquipas,
+                    A is 0,!.
+team_menu_option(4,A):-pergunta("Pressione [Enter]",B),
+                    A is 0,!.
+
+
+listarEquipas:- equipa(NU,NO,FU,TI),
+                format('~n[ ~w - ~w - ~w - ~w ]~n',[NU,NO,FU,TI]),fail.
+                    
 
 statistics_menu:-
     format('~n*** ESTATISTICA  *** ~n'),
@@ -78,12 +99,29 @@ statistics_menu:-
     format('4- SAIR ~n~n').
 
 
-
+% Pedindo dados do utilizador
 pergunta(Question,Answer):-
 	format(Question),
 	gets(Answer).
 
-
+% input from user
 gets(S):-
 	read_line_to_codes(user_input,C),
 	name(S,C).
+
+
+% Salvando base de dados em disco
+salva(Predicado,Arquivo):-
+	tell(Arquivo),
+	listing(Predicado),
+	told.
+
+carregaDados:- carrega('equipas.bd'),
+                carrega('jogadores.bd'),
+                carrega('treinadores.bd'),
+                carrega('jogos.bd'),
+                carrega('jornadas.bd').
+carrega(Arquivo):-
+        exists_file(Arquivo),
+        consult(Arquivo);true.
+
