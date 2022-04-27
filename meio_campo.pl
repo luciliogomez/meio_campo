@@ -69,7 +69,7 @@ team_menu:-
     team_menu_option(R,A),
     A=1,!.
 
-team_menu_option(9,1).
+team_menu_option(9,1):-!.
 team_menu_option(1,A):-format('~n *** CADASTRAR EQUIPA *** ~n'),
                 pergunta("Numero Da Equipa:~n",NUMERO),
                 pergunta("Nome Da Equipa:~n",NOME),
@@ -78,16 +78,51 @@ team_menu_option(1,A):-format('~n *** CADASTRAR EQUIPA *** ~n'),
                 assertz(equipa(NUMERO,NOME,FUNDACAO,TITULOS)),
                 format('~n ---  EQUIPA ADICIONADA --- ~n'),
                 salva(equipa,'equipas.bd'),
+                pergunta("~n Pressione [Enter]",B),
                 A is 0,!.
+
+team_menu_option(2,A):-format('~n *** CADASTRAR JOGADOR *** ~n'),
+                pergunta("Numero Da Equipa:~n",NUMERO_TEAM),
+                team_exists(NUMERO_TEAM),
+                pergunta("Numero do Jogador:~n",NUMERO_PLAYER),
+                pergunta("Nome:~n",NOME),
+                pergunta("Idade:~n",IDADE),
+                pergunta("Altura:~n",ALTURA),
+                pergunta("Peso:~n",PESO),
+                pergunta("Genero:~n",GENERO),
+                pergunta("Posicao:~n",POSICAO),
+                pergunta("Numero de Golos:~n",GOLOS),
+                assertz(jogador(NUMERO_PLAYER,NOME,IDADE,ALTURA,PESO,GENERO,POSICAO,GOLOS,NUMERO_TEAM)),
+                format('~n ---  JOGADOR ADICIONADO --- ~n'),
+                salva(jogador,'jogadores.bd'),
+                pergunta("~n Pressione [Enter]",B),
+                A is 0,!.
+
+team_menu_option(2,A):-format('~n --- FALHA AO CADASTRAR --- ~n'),
+                    pergunta("~n Pressione [Enter]",B),
+                    A is 0,!.
+
+
 team_menu_option(4,A):-format('~n *** LISTA DE EQUIPAS *** ~n'),
                     listarEquipas,
                     A is 0,!.
 team_menu_option(4,A):-pergunta("Pressione [Enter]",B),
                     A is 0,!.
 
+team_menu_option(5,A):-format('~n *** LISTA DE JOGADORES *** ~n'),
+                    listarJogadores,
+                    A is 0,!.
+team_menu_option(5,A):-pergunta("~nPressione [Enter]",B),
+                    A is 0,!.
 
+
+% --- LISTAGENS ---
 listarEquipas:- equipa(NU,NO,FU,TI),
                 format('~n[ ~w - ~w - ~w - ~w ]~n',[NU,NO,FU,TI]),fail.
+
+listarJogadores:- jogador(NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,POS_P,GOL_P,TEAM), 
+                equipa(TEAM,NOM_T,_,_),
+                format('~n[ ~w - ~w - ~w - ~w - ~w - ~w - ~w - ~w - ~w]~n',[NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,POS_P,GOL_P,NOM_T]),fail.
                     
 
 statistics_menu:-
@@ -97,6 +132,11 @@ statistics_menu:-
     format('2- VENCEDOR ~n'),
     format('3- MELHOR MARCADOR ~n'),
     format('4- SAIR ~n~n').
+
+
+
+% --- Validacoes ---
+team_exists(X):-equipa(X,_,_,_).
 
 
 % Pedindo dados do utilizador

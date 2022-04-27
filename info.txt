@@ -3,3 +3,10 @@ jogo(numero,inicio,fim,equipa1,golos1,equipa2,golos2,jornada)
 equipa(numero,nome,fundacao,titulos)
 jogador(codigo,nome,altura,peso,genero,idade,posicao,golos,equipa)
 treinador(codigo,nome,altura,peso,genero,idade,equipa)
+
+
+-------------------------
+TASKS
+-------------------------
+- Limpar a memoria ao sair.
+- validar a existencia da equipe ao cadastrar jogador
