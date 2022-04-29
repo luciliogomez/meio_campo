@@ -59,10 +59,11 @@ team_menu_option(1,A):-format('~n *** CADASTRAR EQUIPA *** ~n'),
 
 team_menu_option(2,A):-format('~n *** CADASTRAR JOGADOR *** ~n'),
                 pergunta("Numero Da Equipa:~n",NUMERO_TEAM),
-                team_exists(NUMERO_TEAM),
+                team_exists(NUMERO_TEAM,E),E = 1,
                 pergunta("Numero do Jogador:~n",NUMERO_PLAYER),
                 pergunta("Nome:~n",NOME),
                 pergunta("Idade:~n",IDADE),
+                is_valid_age(IDADE),
                 pergunta("Altura:~n",ALTURA),
                 pergunta("Peso:~n",PESO),
                 pergunta("Genero:~n",GENERO),
@@ -74,7 +75,7 @@ team_menu_option(2,A):-format('~n *** CADASTRAR JOGADOR *** ~n'),
                 pergunta("~n Pressione [Enter]",B),
                 A is 0,!.
 
-team_menu_option(2,A):-format('~n --- FALHA AO CADASTRAR --- ~n'),
+team_menu_option(2,A):-format('~n --- FALHA AO CADASTRAR. --- ~n'),
                     pergunta("~n Pressione [Enter]",B),
                     A is 0,!.
 

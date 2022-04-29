@@ -5,4 +5,5 @@ equipa(2, 'Grupo2', 2021, 1).
 equipa(3, 'Grupo3', 2022, 0).
 equipa(4, grupo4, 2019, 4).
 equipa(5, 'Grupo FC', 2022, 12).
+equipa(6, 'GRUPO6', 2022, 3).
 
