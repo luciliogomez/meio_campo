@@ -1,4 +1,5 @@
 :- dynamic treinador/7.
 
 treinador(2, 'LIBERNA', 45, 3, 34, 'M', 3).
+treinador(1, 'LUTER', 67, 2, 45, 'M', 1).
 

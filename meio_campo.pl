@@ -118,9 +118,12 @@ team_menu_option(6,A):-pergunta("~nPressione [Enter]~n",_),
                     A is 0,!.
 
 team_menu_option(7,A):-format('~n    *** LISTAR UMA EQUIPA *** ~n'),
-                    listarUmaEquipa,
+                    pergunta("~n NUMERO DA EQUIPA:~n",NUMERO_TEAM),
+                    team_exists(NUMERO_TEAM,R),
+                    R = 1,
+                    listarUmaEquipa(NUMERO_TEAM),
                     A is 0,!.
-team_menu_option(7,A):-pergunta("~nPressione [Enter]~n",_),
+team_menu_option(7,A):-pergunta("~n --- EQUIPA NÃO ENCONTRADA --- ~n~n    Pressione [Enter]~n",_),
                     A is 0,!.
 
 statistics_menu:-
@@ -164,7 +167,23 @@ listarTreinadores:- treinador(NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,TEAM),
                 equipa(TEAM,NOM_T,_,_),
                 format('~n[ ~w - ~w - ~w - ~w - ~w - ~w - ~w ]~n',[NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,NOM_T]),fail.
                     
+listarUmaEquipa(NUM_TEAM):-format('~n-----------------------~n'),
+                            equipa(NUM_TEAM,NO,FU,TI),
+                            format('NOME DA EQUIPA:  ~w ~n',[NO]),
+                            format('ANO DE FUNDACAO: ~w ~n',[FU]),
+                            format('QTD DE TITULOS:  ~w ~n',[TI]),
+                            format('-----------------------~n'),fail.
+listarUmaEquipa(NUM_TEAM):-treinador(_,NOM_T,_,_,_,_,NUM_TEAM),equipa(NUM_TEAM,_,_,_),
+                            format('~n[TREINADOR:  ~w ]~n',[NOM_T]),fail.
+listarUmaEquipa(NUM_TEAM):-format('~n[JOGADORES]~n'),
+                            jogador(_,NOM_P,_,_,_,_,POS_P,_,NUM_TEAM), 
+                            equipa(NUM_TEAM,_,_,_),
+                            format('~n» ~w - ~w ~n',[NOM_P,POS_P]),fail.
 
+listarUmaEquipa(_):-format('~n-----------------------~n'),
+                            pergunta("~n PRESSIONE [ENTER]~n",_),!.
+
+                            
 
 
 
