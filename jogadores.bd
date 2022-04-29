@@ -10,4 +10,5 @@ jogador(33, e, 3, 3, 3, e, 4, 5, 33).
 jogador(ee, ee, 3, 3, 3, e, 3, 3, 33).
 jogador(5, 'Lucas', 43, 3, 3, m, 4, 5, 2).
 jogador(3, 'KIKO', 44, 3, 34, 'M', 'AV', 3, 2).
+jogador(2, 2, 22, 2, 2, 2, 2, 2, 2).
 

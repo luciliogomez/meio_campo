@@ -54,7 +54,7 @@ team_menu_option(1,A):-format('~n *** CADASTRAR EQUIPA *** ~n'),
                 assertz(equipa(NUMERO,NOME,FUNDACAO,TITULOS)),
                 format('~n ---  EQUIPA ADICIONADA --- ~n'),
                 salva(equipa,'equipas.bd'),
-                pergunta("~n Pressione [Enter]",B),
+                pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
 
 team_menu_option(2,A):-format('~n *** CADASTRAR JOGADOR *** ~n'),
@@ -72,24 +72,55 @@ team_menu_option(2,A):-format('~n *** CADASTRAR JOGADOR *** ~n'),
                 assertz(jogador(NUMERO_PLAYER,NOME,IDADE,ALTURA,PESO,GENERO,POSICAO,GOLOS,NUMERO_TEAM)),
                 format('~n ---  JOGADOR ADICIONADO --- ~n'),
                 salva(jogador,'jogadores.bd'),
-                pergunta("~n Pressione [Enter]",B),
+                pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
 
 team_menu_option(2,A):-format('~n --- FALHA AO CADASTRAR. --- ~n'),
-                    pergunta("~n Pressione [Enter]",B),
+                    pergunta("~n Pressione [Enter]",_),
                     A is 0,!.
 
+
+team_menu_option(3,A):-format('~n *** CADASTRAR TREINADOR *** ~n'),
+                pergunta("Numero Da Equipa:~n",NUMERO_TEAM),
+                team_exists(NUMERO_TEAM,E),E = 1,
+                pergunta("Codigo do Treinador:~n",CODE_COACH),
+                pergunta("Nome:~n",NOME),
+                pergunta("Idade:~n",IDADE),
+                pergunta("Altura:~n",ALTURA),
+                pergunta("Peso:~n",PESO),
+                pergunta("Genero:~n",GENERO),
+                assertz(treinador(CODE_COACH,NOME,IDADE,ALTURA,PESO,GENERO,NUMERO_TEAM)),
+                format('~n ---  TREINADOR ADICIONADO --- ~n'),
+                salva(treinador,'treinadores.bd'),
+                pergunta("~n Pressione [Enter]",_),
+                A is 0,!.
+
+team_menu_option(3,A):-format('~n --- FALHA AO CADASTRAR. --- ~n'),
+                    pergunta("~n Pressione [Enter]",_),
+                    A is 0,!.
 
 team_menu_option(4,A):-format('~n *** LISTA DE EQUIPAS *** ~n'),
                     listarEquipas,
                     A is 0,!.
-team_menu_option(4,A):-pergunta("Pressione [Enter]",B),
+team_menu_option(4,A):-pergunta(" ~nPressione [Enter]~n",_),
                     A is 0,!.
 
 team_menu_option(5,A):-format('~n *** LISTA DE JOGADORES *** ~n'),
                     listarJogadores,
                     A is 0,!.
-team_menu_option(5,A):-pergunta("~nPressione [Enter]",B),
+team_menu_option(5,A):-pergunta("~nPressione [Enter]~n",_),
+                    A is 0,!.
+
+team_menu_option(6,A):-format('~n    *** LISTA DE TREINADORES *** ~n'),
+                    listarTreinadores,
+                    A is 0,!.
+team_menu_option(6,A):-pergunta("~nPressione [Enter]~n",_),
+                    A is 0,!.
+
+team_menu_option(7,A):-format('~n    *** LISTAR UMA EQUIPA *** ~n'),
+                    listarUmaEquipa,
+                    A is 0,!.
+team_menu_option(7,A):-pergunta("~nPressione [Enter]~n",_),
                     A is 0,!.
 
 statistics_menu:-
@@ -127,6 +158,11 @@ listarEquipas:- equipa(NU,NO,FU,TI),
 listarJogadores:- jogador(NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,POS_P,GOL_P,TEAM), 
                 equipa(TEAM,NOM_T,_,_),
                 format('~n[ ~w - ~w - ~w - ~w - ~w - ~w - ~w - ~w - ~w]~n',[NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,POS_P,GOL_P,NOM_T]),fail.
+                    
+
+listarTreinadores:- treinador(NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,TEAM), 
+                equipa(TEAM,NOM_T,_,_),
+                format('~n[ ~w - ~w - ~w - ~w - ~w - ~w - ~w ]~n',[NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,NOM_T]),fail.
                     
 
 
