@@ -26,31 +26,7 @@ open_menu(now,A):- repeat,
                 R=5,A is 0, !.
 
 
-main_menu:-
-    format('~n*** MENU  *** ~n'),
-    format('-------------~n'),
-    format('1- JOGO ~n'),
-    format('2- EQUIPAS ~n'),
-    format('3- ESTATISTICAS ~n'),
-    format('4- SAIR ~n~n').
 
-game_menu:-
-    format('~n*** JOGOS  *** ~n'),
-    format('-------------~n'),
-    format('1- CADASTRAR JOGOS ~n'),
-    format('2- JOGO A DECORRER ~n'),
-    format('3- LISTAR TODOS RESULTADOS ~n'),
-    format('4- LISTAR UM RESULTADO ~n~n'),
-    format('5- SAIR ~n~n').
-
-gamenow_menu:-
-    format('~n*** JOGO A DECORRER  *** ~n'),
-    format('-------------~n'),
-    format('1- INICIAR ~n'),
-    format('2- TERMINAR JOGO ~n'),
-    format('3- ATRIBUIR GOLOS ~n'),
-    format('4- ESTATISTICA DO JOGO~n~n'),
-    format('5- SAIR~n~n').
 
 team_menu:-
     repeat,
@@ -115,6 +91,33 @@ team_menu_option(5,A):-format('~n *** LISTA DE JOGADORES *** ~n'),
 team_menu_option(5,A):-pergunta("~nPressione [Enter]",B),
                     A is 0,!.
 
+statistics_menu:-
+    format('~n*** ESTATISTICA  *** ~n'),
+    format('-------------~n'),
+    format('1- TABELA CLASSIFICATIVA ~n'),
+    format('2- VENCEDOR ~n'),
+    format('3- MELHOR MARCADOR ~n'),
+    format('4- SAIR ~n~n').
+
+
+main_menu:-
+    format('~n*** MENU  *** ~n'),
+    format('-------------~n'),
+    format('1- JOGO ~n'),
+    format('2- EQUIPAS ~n'),
+    format('3- ESTATISTICAS ~n'),
+    format('4- SAIR ~n~n').
+
+game_menu:-
+    format('~n*** JOGOS  *** ~n'),
+    format('-------------~n'),
+    format('1- CADASTRAR JOGOS ~n'),
+    format('2- JOGO A DECORRER ~n'),
+    format('3- LISTAR TODOS RESULTADOS ~n'),
+    format('4- LISTAR UM RESULTADO ~n~n'),
+    format('5- SAIR ~n~n').
+
+
 
 % --- LISTAGENS ---
 listarEquipas:- equipa(NU,NO,FU,TI),
@@ -125,42 +128,19 @@ listarJogadores:- jogador(NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,POS_P,GOL_P,TEAM)
                 format('~n[ ~w - ~w - ~w - ~w - ~w - ~w - ~w - ~w - ~w]~n',[NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,POS_P,GOL_P,NOM_T]),fail.
                     
 
-statistics_menu:-
-    format('~n*** ESTATISTICA  *** ~n'),
-    format('-------------~n'),
-    format('1- TABELA CLASSIFICATIVA ~n'),
-    format('2- VENCEDOR ~n'),
-    format('3- MELHOR MARCADOR ~n'),
-    format('4- SAIR ~n~n').
 
 
 
-% --- Validacoes ---
-team_exists(X):-equipa(X,_,_,_).
 
-
-% Pedindo dados do utilizador
-pergunta(Question,Answer):-
-	format(Question),
-	gets(Answer).
-
-% input from user
-gets(S):-
-	read_line_to_codes(user_input,C),
-	name(S,C).
-
-
-% Salvando base de dados em disco
-salva(Predicado,Arquivo):-
-	tell(Arquivo),
-	listing(Predicado),
-	told.
 
 carregaDados:- carrega('equipas.bd'),
                 carrega('jogadores.bd'),
                 carrega('treinadores.bd'),
                 carrega('jogos.bd'),
-                carrega('jornadas.bd').
+                carrega('jornadas.bd'),
+                carrega('menus.pl'),
+                carrega('helpers.pl'),
+                carrega('validate.pl').
 carrega(Arquivo):-
         exists_file(Arquivo),
         consult(Arquivo);true.

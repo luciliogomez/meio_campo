@@ -9,4 +9,4 @@ treinador(codigo,nome,altura,peso,genero,idade,equipa)
 TASKS
 -------------------------
 - Limpar a memoria ao sair.
-- validar a existencia da equipe ao cadastrar jogador
+- validar a existencia da equipe ao cadastrar jogador. [Done]
