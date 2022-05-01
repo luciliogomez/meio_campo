@@ -9,8 +9,7 @@ start:- carregaDados,
 
 open_menu(1,A):- repeat,
                 game_menu,
-                pergunta("Digite a Opcao~n",R),
-                R=5,A is 0,!.
+                A is 0,!.
 open_menu(2,A):- repeat,
                 team_menu,
                 A is 0,!.
@@ -144,16 +143,38 @@ main_menu:-
     format('4- SAIR ~n~n').
 
 game_menu:-
+    repeat,
     format('~n*** JOGOS  *** ~n'),
     format('-------------~n'),
-    format('1- CADASTRAR JOGOS ~n'),
-    format('2- JOGO A DECORRER ~n'),
-    format('3- LISTAR TODOS RESULTADOS ~n'),
-    format('4- LISTAR UM RESULTADO ~n~n'),
-    format('5- SAIR ~n~n').
+    format('1- ADICIONAR JORNADA ~n'),
+    format('2- CADASTRAR JOGOS ~n'),
+    format('3- JOGO A DECORRER ~n'),
+    format('4- LISTAR JOGOS ~n'),
+    format('5- LISTAR TODOS RESULTADOS ~n'),
+    format('6- LISTAR UM RESULTADO ~n~n'),
+    format('0- SAIR ~n~n'),
+    pergunta("Digite a Opcao~n",R),
+    game_menu_option(R,A),
+    A = 1,!.
+
+game_menu_option(0,1):-!.
+
+game_menu_option(1,A):-format('~n *** ADICIONAR JORNADA *** ~n'),
+                pergunta("Pretende Adicionar uma nova jornada? [s/n]:~n",R),
+                R = 's',
+                total_jornadas(TOTAL),
+                N is TOTAL+1,
+                retract(total_jornadas(TOTAL)),
+                assertz(total_jornadas(N)),
+                format('~n ---  JORNADA ADICIONADA --- ~n'),
+                salva(total_jornadas,'globais.bd'),
+                pergunta("~n Pressione [Enter]",_),
+                A is 0,!.
 
 
-
+game_menu_option(1,A):-format('~n --- IMPOSSÍVEL ADICIONAR JORNADA --- ~n'),
+                        pergunta("~n Pressione [Enter]",_),
+                        A is 0,!.
 % --- LISTAGENS ---
 listarEquipas:- equipa(NU,NO,FU,TI),
                 format('~n[ ~w - ~w - ~w - ~w ]~n',[NU,NO,FU,TI]),fail.
@@ -194,6 +215,7 @@ carregaDados:- carrega('equipas.bd'),
                 carrega('treinadores.bd'),
                 carrega('jogos.bd'),
                 carrega('jornadas.bd'),
+                carrega('globais.bd'),
                 carrega('menus.pl'),
                 carrega('helpers.pl'),
                 carrega('validate.pl').

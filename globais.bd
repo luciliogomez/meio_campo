@@ -1,0 +1,7 @@
+:- dynamic total_jornadas/1.
+
+total_jornadas(2).
+
+
+
+

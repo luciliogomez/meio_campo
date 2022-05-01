@@ -10,3 +10,42 @@ TASKS
 -------------------------
 - Limpar a memoria ao sair.
 - validar a existencia da equipe ao cadastrar jogador. [Done]
+- CADASTRO DE JORNADAS
+- CADASTRO DE JOGOS
+	[Estado do Jogo]:
+		0 - marcado
+		1 - iniciado
+		2- terminado
+- MENU JOGO A DECORRER
+	
+	
+----------------------
+LOGIC INSIGHTS
+----------------------	
+Numero de Jornadas = (numero de equipas - 1)
+
+
+
+[EQUIPAS]
+A,B,C,D
+
+[JORNADA 1]
+	A - B
+	C - D
+[JORNADA 2]
+	A - C
+	B - D
+[JORNADA 3]
+	A - D
+	B - C
+
+
+[EQUIPAS]
+A,B,C
+
+[JORNADA 1]
+	A - B
+	C -
+[JORNADA 2]
+	A - C
+	B - 
