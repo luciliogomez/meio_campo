@@ -155,7 +155,6 @@ game_menu:-
     format('3- JOGO A DECORRER ~n'),
     format('4- LISTAR JOGOS ~n'),
     format('5- LISTAR TODOS RESULTADOS ~n'),
-    format('6- LISTAR UM RESULTADO ~n~n'),
     format('0- SAIR ~n~n'),
     pergunta("Digite a Opcao~n",R),
     game_menu_option(R,A),
@@ -203,6 +202,114 @@ game_menu_option(2,A):-
                         pergunta("~n Pressione [Enter]",_),
                         A is 0,!.
 
+game_menu_option(3,A):-repeat,
+                        gamenow_menu,
+                        A is 0,!.
+
+game_menu_option(4,A):-format('~n *** LISTA DE JOGOS *** ~n'),
+                        format('-----------------------~n'),
+                        listar_jogos,
+                        A is 0,!.
+
+game_menu_option(5,A):-format('~n *** RESULTADOS *** ~n'),
+                        format('-----------------------~n'),
+                        listar_jogos_terminados,
+                        A is 0,!.
+
+
+
+
+gamenow_menu:-
+    repeat,
+    format('~n*** JOGO A DECORRER  *** ~n'),
+    format('-------------~n'),
+    format('1- INICIAR JOGO ~n'),
+    format('2- ATRIBUIR GOLOS ~n'),
+    format('3- TERMINAR JOGO ~n'),
+    format('0- VOLTAR ~n'),
+    pergunta("Digite a Opcao~n",R),
+    gamenow_menu_option(R,A),
+    A = 1,!.
+
+gamenow_menu_option(0,A):- A is 1,!.
+
+gamenow_menu_option(1,A):-format('~n *** INICIAR UM JOGO *** ~n'),
+                listar_jogos_marcados,
+                pergunta("Indique o numero do Jogo:~n",NUMERO_DO_JOGO),
+                jogo(JORNADA,NUMERO_DO_JOGO,DATA,EQUIPA1,GOLOS1,EQUIPA2,GOLOS2,ESTADO),
+                ESTADO = 0,
+                retract(jogo(JORNADA,NUMERO_DO_JOGO,DATA,EQUIPA1,GOLOS1,EQUIPA2,GOLOS2,ESTADO)),
+                assertz(jogo(JORNADA,NUMERO_DO_JOGO,DATA,EQUIPA1,GOLOS1,EQUIPA2,GOLOS2,1)),
+                format('~n ---  JOGO INICIADO --- ~n'),
+                salva(jogo,'jogos.bd'),
+                pergunta("~n Pressione [Enter]",_),
+                A is 0,!.
+
+gamenow_menu_option(1,A):-format('~n FALHA AO INICIAR JOGO ~n'),A is 0,!.
+
+
+gamenow_menu_option(3,A):-format('~n *** TERMINAR UM JOGO *** ~n'),
+                listar_jogos_iniciados,
+                pergunta("Indique o numero do Jogo:~n",NUMERO_DO_JOGO),
+                jogo(JORNADA,NUMERO_DO_JOGO,DATA,EQUIPA1,GOLOS1,EQUIPA2,GOLOS2,ESTADO),
+                ESTADO = 1,
+                retract(jogo(JORNADA,NUMERO_DO_JOGO,DATA,EQUIPA1,GOLOS1,EQUIPA2,GOLOS2,ESTADO)),
+                assertz(jogo(JORNADA,NUMERO_DO_JOGO,DATA,EQUIPA1,GOLOS1,EQUIPA2,GOLOS2,2)),
+                format('~n ---  JOGO TERMINADO --- ~n'),
+                format('~n --- RESULTADO DO JOGO ~n'),
+                equipa(EQUIPA1,NOME1,_,_),
+                equipa(EQUIPA2,NOME2,_,_),
+                format('~n» ~w ~w : ~w ~w «~n',[NOME1,GOLOS1,GOLOS2,NOME2]),
+                salva(jogo,'jogos.bd'),
+                pergunta("~n Pressione [Enter]",_),
+                A is 0,!.
+
+gamenow_menu_option(3,A):-format('~n FALHA AO TERMINAR JOGO ~n'),A is 0,!.
+
+
+gamenow_menu_option(2,A):-format('~n *** ATRIBUIR GOLOS *** ~n'),
+                listar_jogos_iniciados,
+                pergunta("Indique o numero do Jogo:~n",NUMERO_DO_JOGO),
+                jogo(JORNADA,NUMERO_DO_JOGO,DATA,EQUIPA1,GOLOS1,EQUIPA2,GOLOS2,ESTADO),
+                ESTADO = 1,
+                pergunta("NOME DA EQUIPA:~n",NOME_EQUIPA),
+                buscaEquipa(NOME_EQUIPA,EQUIPA1,EQUIPA2,NUMERO_EQUIPA),
+                NUMERO_EQUIPA \= 0,
+                listar_jogadores_da_equipa(NUMERO_EQUIPA),
+                pergunta("Indique o numero do Jogador:~n",NUMERO_DO_JOGADOR),
+                jogador(NUMERO_DO_JOGADOR,NOME_DO_JOGADOR,ALT,PES,GEN,IDA,POS,GOLS,NUMERO_EQUIPA),
+                pergunta("Quantos Golos:~n",NUM_GOLS),
+                atribuirGolo(JORNADA,NUMERO_DO_JOGO,DATA,EQUIPA1,GOLOS1,EQUIPA2,GOLOS2,ESTADO,NUMERO_EQUIPA,NUM_GOLS,R),
+                R = 1,
+                QTD_GOLS is GOLS + NUM_GOLS,
+                retract(jogador(NUMERO_DO_JOGADOR,NOME_DO_JOGADOR,ALT,PES,GEN,IDA,POS,GOLS,NUMERO_EQUIPA)),
+                assertz(jogador(NUMERO_DO_JOGADOR,NOME_DO_JOGADOR,ALT,PES,GEN,IDA,POS,QTD_GOLS,NUMERO_EQUIPA)),
+                format('~n ---  CONCLUIDO --- ~n'),
+                salva(jogo,'jogos.bd'),
+                salva(jogador,'jogadores.bd'),
+                pergunta("~n Pressione [Enter]",_),
+                A is 0,!.
+
+gamenow_menu_option(2,A):-format('~n FALHA AO ATRIBUIR GOLOS ~n'),A is 0,!.
+
+buscaEquipa(NOME,E1,_,NUMERO):-equipa(E1,NOME,_,_),NUMERO is E1,!.
+buscaEquipa(NOME,_,E2,NUMERO):-equipa(E2,NOME,_,_),NUMERO is E2,!.
+buscaEquipa(_,_,_,NUMERO):-NUMERO is 0,!.
+
+atribuirGolo(JORN,NUMJOGO,DATA,E1,GOL1,E2,GOL2,ESTADO,NUMEQUIPA,NUM_GOLS,R):-
+                NUMEQUIPA = E1,
+                retract(jogo(JORN,NUMJOGO,DATA,E1,GOL1,E2,GOL2,ESTADO)),
+                assertz(jogo(JORN,NUMJOGO,DATA,E1,NUM_GOLS,E2,GOL2,ESTADO)),
+                R is 1,!.
+
+atribuirGolo(JORN,NUMJOGO,DATA,E1,GOL1,E2,GOL2,ESTADO,NUMEQUIPA,NUM_GOLS,R):-
+                NUMEQUIPA = E2,
+                retract(jogo(JORN,NUMJOGO,DATA,E1,GOL1,E2,GOL2,ESTADO)),
+                assertz(jogo(JORN,NUMJOGO,DATA,E1,GOL1,E2,NUM_GOLS,ESTADO)),
+                R is 1,!.
+
+atribuirGolo(_,_,_,_,_,_,_,_,_,_,R):-
+                R is 0,!.
 
 atualiza_total_jornadas(TOTAL):-
                                 N is TOTAL+1,
@@ -246,6 +353,7 @@ listarUmaEquipa(NUM_TEAM):-format('~n-----------------------~n'),
                             format('-----------------------~n'),fail.
 listarUmaEquipa(NUM_TEAM):-treinador(_,NOM_T,_,_,_,_,NUM_TEAM),equipa(NUM_TEAM,_,_,_),
                             format('~n[TREINADOR:  ~w ]~n',[NOM_T]),fail.
+
 listarUmaEquipa(NUM_TEAM):-format('~n[JOGADORES]~n'),
                             jogador(_,NOM_P,_,_,_,_,POS_P,_,NUM_TEAM), 
                             equipa(NUM_TEAM,_,_,_),
@@ -254,6 +362,57 @@ listarUmaEquipa(NUM_TEAM):-format('~n[JOGADORES]~n'),
 listarUmaEquipa(_):-format('~n-----------------------~n'),
                             pergunta("~n PRESSIONE [ENTER]~n",_),!.
 
+listar_jogos:-  jornada(J),
+                format('~n~n [JORNADA ~w] ~n',[J]),
+                jogo(J,_,_,EQUIPA1,_,EQUIPA2,_,_), 
+                equipa(EQUIPA1,NOME1,_,_),
+                equipa(EQUIPA2,NOME2,_,_),
+                format('~n» ~w - ~w ~n',[NOME1,NOME2]),fail.
+
+listar_jogos:-format('~n-----------------------~n'),
+                            pergunta("~n PRESSIONE [ENTER]~n",_),!.
+
+
+listar_jogos_marcados:-  jornada(J),
+                format('~n~n [JORNADA ~w] ~n',[J]),
+                jogo(J,NUM,_,EQUIPA1,_,EQUIPA2,_,E),
+                E = 0, 
+                equipa(EQUIPA1,NOME1,_,_),
+                equipa(EQUIPA2,NOME2,_,_),
+                format('~n ~w» [~w - ~w] ~n',[NUM,NOME1,NOME2]),fail.
+
+listar_jogos_marcados:-format('~n-----------------------~n'),!.
+
+listar_jogos_iniciados:-  jornada(J),
+                format('~n~n [JORNADA ~w] ~n',[J]),
+                jogo(J,NUM,_,EQUIPA1,_,EQUIPA2,_,E),
+                E = 1, 
+                equipa(EQUIPA1,NOME1,_,_),
+                equipa(EQUIPA2,NOME2,_,_),
+                format('~n ~w» [~w - ~w] ~n',[NUM,NOME1,NOME2]),fail.
+
+listar_jogos_iniciados:-format('~n-----------------------~n'),!.
+
+
+listar_jogos_terminados:-  jornada(J),
+                format('~n~n [JORNADA ~w] ~n',[J]),
+                jogo(J,NUM,_,EQUIPA1,GOL1,EQUIPA2,GOL2,E),
+                E = 2, 
+                equipa(EQUIPA1,NOME1,_,_),
+                equipa(EQUIPA2,NOME2,_,_),
+                format('~n ~w« ~w (~w) - (~w) ~w ~n',[NUM,NOME1,GOL1,GOL2,NOME2]),fail.
+
+listar_jogos_terminados:-format('~n-----------------------~n'),!.
+
+
+listar_jogadores_da_equipa(NUMERO_EQUIPA):-
+                                        equipa(NUMERO_EQUIPA,NOM,_,_),
+                                        format('~n Jogadores da equipa ~w~n',[NOM]),
+                                        jogador(COD,NOME,_,_,_,_,_,_,NUMERO_EQUIPA),
+                                        format('~n~w ~w',[COD,NOME]),fail.
+                                        
+listar_jogadores_da_equipa(_):-format('~n-----------------------~n'),
+                                pergunta('~nDigite [Enter]~n',_),!.
                             
 
 

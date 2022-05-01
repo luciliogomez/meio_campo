@@ -11,7 +11,7 @@ TASKS
 - Limpar a memoria ao sair.
 - validar a existencia da equipe ao cadastrar jogador. [Done]
 - CADASTRO DE JORNADAS[Done]
-- CADASTRO DE JOGOS
+- CADASTRO DE JOGOS[done]
 	[Estado do Jogo]:
 		0 - marcado
 		1 - iniciado

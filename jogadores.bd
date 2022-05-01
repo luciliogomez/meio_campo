@@ -1,6 +1,5 @@
 :- dynamic jogador/9.
 
-jogador(1, 'Lucilio', 23, 1.56, 45.6, 'M', 'Central', 2, 1).
 jogador(2, 'Ludmilo', 24, 2.4, 55.3, 'M', 'Avancado', 4, 1).
 jogador(3, 'Edson', 34, 22.3, 50, 'M', 'Avancado', 5, 2).
 jogador('Eliude', 'Eliude', 23, 4, 3, 3, 3, 3, 1).
@@ -11,4 +10,5 @@ jogador(ee, ee, 3, 3, 3, e, 3, 3, 33).
 jogador(5, 'Lucas', 43, 3, 3, m, 4, 5, 2).
 jogador(3, 'KIKO', 44, 3, 34, 'M', 'AV', 3, 2).
 jogador(2, 2, 22, 2, 2, 2, 2, 2, 2).
+jogador(1, 'Lucilio', 23, 1.56, 45.6, 'M', 'Central', 3, 1).
 

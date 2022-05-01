@@ -1,4 +1,4 @@
 :- dynamic total_jogos/1.
 
-total_jogos(2).
+total_jogos(6).
 
