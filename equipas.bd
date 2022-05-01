@@ -6,4 +6,8 @@ equipa(3, 'Grupo3', 2022, 0).
 equipa(4, grupo4, 2019, 4).
 equipa(5, 'Grupo FC', 2022, 12).
 equipa(6, 'GRUPO6', 2022, 3).
+equipa(56, 'TESTE', 123, 33).
+equipa(222, 2222, 222, 222).
+equipa(222, 2, 2, 2).
+equipa(222, 22222, 222222, 2222).
 
