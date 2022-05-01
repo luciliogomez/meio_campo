@@ -181,10 +181,45 @@ game_menu_option(1,A):-format('~n --- IMPOSSÍVEL ADICIONAR JORNADA --- ~n'),
                         A is 0,!.
 
 
+game_menu_option(2,A):-format('~n *** ADICIONAR JOGO *** ~n'),
+                pergunta("Indique a Jornada:~n",JORNADA),
+                pergunta("Numero da equipa anfitriã:~n",EQUIPA1),
+                pergunta("Numero da equipa Visitante:~n",EQUIPA2),
+                pergunta("Data do Jogo:~n",DATA_JOGO),
+                is_valid_game(JORNADA,EQUIPA1,EQUIPA2,R),
+                R = 1,
+                total_jogos(TOTAL),
+                NUMERO_DO_JOGO is (TOTAL+1),
+                atualiza_total_jogos(TOTAL),
+                assertz(jogo(JORNADA,NUMERO_DO_JOGO,DATA_JOGO,EQUIPA1,0,EQUIPA2,0,0)),
+                format('~n ---  JOGO MARCADO --- ~n'),
+                salva(total_jogos,'total_jogos.bd'),
+                salva(jogo,'jogos.bd'),
+                pergunta("~n Pressione [Enter]",_),
+                A is 0,!.
+
+
+game_menu_option(2,A):-
+                        pergunta("~n Pressione [Enter]",_),
+                        A is 0,!.
+
+
 atualiza_total_jornadas(TOTAL):-
                                 N is TOTAL+1,
                                 retract(total_jornadas(TOTAL)),
                                 assertz(total_jornadas(N)).
+
+atualiza_total_jogos(TOTAL):-
+                                N is TOTAL+1,
+                                retract(total_jogos(TOTAL)),
+                                assertz(total_jogos(N)).
+
+
+atualiza_total_equipas(TOTAL):-
+                                N is TOTAL+1,
+                                retract(total_equipas(TOTAL)),
+                                assertz(total_equipas(N)).
+
 
 adicionar_jornada(X):-
                     N is X+1,
@@ -232,6 +267,7 @@ carregaDados:- carrega('equipas.bd'),
                 carrega('jornadas.bd'),
                 carrega('total_jornadas.bd'),
                 carrega('total_equipas.bd'),
+                carrega('total_jogos.bd'),
                 carrega('menus.pl'),
                 carrega('helpers.pl'),
                 carrega('validate.pl').

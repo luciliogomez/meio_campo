@@ -1,5 +1,5 @@
-jornadas(numero,jogos)     => 30
-jogo(numero,inicio,fim,equipa1,golos1,equipa2,golos2,jornada)				 
+psjornadas(numero,jogos)     => 30
+jogo(jornada,numero,data,equipa1,golos1,equipa2,golos2,estado)				 
 equipa(numero,nome,fundacao,titulos)
 jogador(codigo,nome,altura,peso,genero,idade,posicao,golos,equipa)
 treinador(codigo,nome,altura,peso,genero,idade,equipa)
@@ -10,7 +10,7 @@ TASKS
 -------------------------
 - Limpar a memoria ao sair.
 - validar a existencia da equipe ao cadastrar jogador. [Done]
-- CADASTRO DE JORNADAS
+- CADASTRO DE JORNADAS[Done]
 - CADASTRO DE JOGOS
 	[Estado do Jogo]:
 		0 - marcado
