@@ -51,12 +51,12 @@ team_menu_option(1,A):-format('~n *** CADASTRAR EQUIPA *** ~n'),
                 pergunta("Data de Fundacao:~n",FUNDACAO),
                 pergunta("Numero de titulos:~n",TITULOS),
                 assertz(equipa(NUMERO,NOME,FUNDACAO,TITULOS)),
-                qtd_equipas(TOTAL), N is TOTAL+1,
-                retract(qtd_equipas(TOTAL)),
-                assertz(qtd_equipas(N)),
+                total_equipas(TOTAL), N is TOTAL+1,
+                retract(total_equipas(TOTAL)),
+                assertz(total_equipas(N)),
                 format('~n ---  EQUIPA ADICIONADA --- ~n'),
                 salva(equipa,'equipas.bd'),
-                salva(qtd_equipas,'global.bd'),
+                salva(total_equipas,'total_equipas.bd'),
                 pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
 
@@ -166,12 +166,12 @@ game_menu_option(0,1):-!.
 game_menu_option(1,A):-format('~n *** ADICIONAR JORNADA *** ~n'),
                 pergunta("Pretende Adicionar uma nova jornada? [s/n]:~n",R),
                 R = 's',
-                qtd_jornadas(TOTAL),
-                N is TOTAL+1,
-                retract(qtd_jornadas(TOTAL)),
-                assertz(qtd_jornadas(N)),
+                total_jornadas(TOTAL),
+                atualiza_total_jornadas(TOTAL),
+                adicionar_jornada(TOTAL),
                 format('~n ---  JORNADA ADICIONADA --- ~n'),
-                salva(qtd_jornadas,'global.pl'),
+                salva(total_jornadas,'total_jornadas.bd'),
+                salva(jornada,'jornadas.bd'),
                 pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
 
@@ -179,6 +179,17 @@ game_menu_option(1,A):-format('~n *** ADICIONAR JORNADA *** ~n'),
 game_menu_option(1,A):-format('~n --- IMPOSSÍVEL ADICIONAR JORNADA --- ~n'),
                         pergunta("~n Pressione [Enter]",_),
                         A is 0,!.
+
+
+atualiza_total_jornadas(TOTAL):-
+                                N is TOTAL+1,
+                                retract(total_jornadas(TOTAL)),
+                                assertz(total_jornadas(N)).
+
+adicionar_jornada(X):-
+                    N is X+1,
+                    assertz(jornada(N)).
+
 % --- LISTAGENS ---
 listarEquipas:- equipa(NU,NO,FU,TI),
                 format('~n[ ~w - ~w - ~w - ~w ]~n',[NU,NO,FU,TI]),fail.
@@ -219,7 +230,8 @@ carregaDados:- carrega('equipas.bd'),
                 carrega('treinadores.bd'),
                 carrega('jogos.bd'),
                 carrega('jornadas.bd'),
-                carrega('global.pl'),
+                carrega('total_jornadas.bd'),
+                carrega('total_equipas.bd'),
                 carrega('menus.pl'),
                 carrega('helpers.pl'),
                 carrega('validate.pl').

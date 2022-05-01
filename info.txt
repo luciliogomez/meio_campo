@@ -41,11 +41,25 @@ A,B,C,D
 
 
 [EQUIPAS]
-A,B,C
+A,B,C,D,E,F
 
 [JORNADA 1]
 	A - B
-	C -
+	C - D
+	E - F
 [JORNADA 2]
 	A - C
-	B - 
+	B - E
+	D - F
+[JORNADA 3]
+	A - D
+	B - F
+	E - C
+[JORNADA 4]
+	A - E
+	B - D
+	C - F
+[JORNADA 5]
+	A - F
+	B - C
+	D - E
