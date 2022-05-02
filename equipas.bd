@@ -1,18 +1,22 @@
 :- dynamic equipa/4.
 
-equipa(1, 'Grupo1', 2019, 3).
-equipa(2, 'Grupo2', 2021, 1).
-equipa(3, 'Grupo3', 2022, 0).
-equipa(4, grupo4, 2019, 4).
-equipa(5, 'Grupo FC', 2022, 12).
-equipa(6, 'GRUPO6', 2022, 3).
-equipa(56, 'TESTE', 123, 33).
-equipa(222, 2222, 222, 222).
-equipa(222, 2, 2, 2).
-equipa(222, 22222, 222222, 2222).
-equipa(44444, 44444, 4444, 444).
-equipa(55555, 5555, 55555, 5555).
-equipa(555555555, 555555, 555555, 555555).
-equipa(eeee, eeeee, ee, ee).
-equipa(333333333, 3333333333, 3333333333, 333333333).
+
+:- dynamic equipa/5.
+
+equipa(2, 'Grupo2', 2021, 1, 0).
+equipa(5, 'Grupo FC', 2022, 12, 0).
+equipa(6, 'GRUPO6', 2022, 3, 0).
+equipa(56, 'TESTE', 123, 33, 0).
+equipa(222, 2222, 222, 222, 0).
+equipa(222, 2, 2, 2, 0).
+equipa(222, 22222, 222222, 2222, 0).
+equipa(44444, 44444, 4444, 444, 0).
+equipa(55555, 5555, 55555, 5555, 0).
+equipa(555555555, 555555, 555555, 555555, 0).
+equipa(eeee, eeeee, ee, ee, 0).
+equipa(333333333, 3333333333, 3333333333, 333333333, 0).
+equipa(23, 'Grupo5', '12/2/2022', 2, 0).
+equipa(3, 'Grupo3', 2022, 0, 3).
+equipa(1, 'Grupo1', 2019, 3, 1).
+equipa(4, grupo4, 2019, 4, 1).
 

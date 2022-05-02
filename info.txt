@@ -1,6 +1,6 @@
 psjornadas(numero,jogos)     => 30
 jogo(jornada,numero,data,equipa1,golos1,equipa2,golos2,estado)				 
-equipa(numero,nome,fundacao,titulos)
+equipa(numero,nome,fundacao,titulos,pontos)
 jogador(codigo,nome,altura,peso,genero,idade,posicao,golos,equipa)
 treinador(codigo,nome,altura,peso,genero,idade,equipa)
 

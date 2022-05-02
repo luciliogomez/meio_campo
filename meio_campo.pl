@@ -50,7 +50,7 @@ team_menu_option(1,A):-format('~n *** CADASTRAR EQUIPA *** ~n'),
                 pergunta("Nome Da Equipa:~n",NOME),
                 pergunta("Data de Fundacao:~n",FUNDACAO),
                 pergunta("Numero de titulos:~n",TITULOS),
-                assertz(equipa(NUMERO,NOME,FUNDACAO,TITULOS)),
+                assertz(equipa(NUMERO,NOME,FUNDACAO,TITULOS,0)),
                 total_equipas(TOTAL), N is TOTAL+1,
                 retract(total_equipas(TOTAL)),
                 assertz(total_equipas(N)),
@@ -257,10 +257,13 @@ gamenow_menu_option(3,A):-format('~n *** TERMINAR UM JOGO *** ~n'),
                 assertz(jogo(JORNADA,NUMERO_DO_JOGO,DATA,EQUIPA1,GOLOS1,EQUIPA2,GOLOS2,2)),
                 format('~n ---  JOGO TERMINADO --- ~n'),
                 format('~n --- RESULTADO DO JOGO ~n'),
-                equipa(EQUIPA1,NOME1,_,_),
-                equipa(EQUIPA2,NOME2,_,_),
+                equipa(EQUIPA1,NOME1,_,_,_),
+                equipa(EQUIPA2,NOME2,_,_,_),
                 format('~n» ~w ~w : ~w ~w «~n',[NOME1,GOLOS1,GOLOS2,NOME2]),
+                atribuir_pontuacao(EQUIPA1,GOLOS1,EQUIPA2,GOLOS2,R),
+                R = 1,
                 salva(jogo,'jogos.bd'),
+                salva(equipa,'equipas.bd'),
                 pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
 
@@ -292,24 +295,46 @@ gamenow_menu_option(2,A):-format('~n *** ATRIBUIR GOLOS *** ~n'),
 
 gamenow_menu_option(2,A):-format('~n FALHA AO ATRIBUIR GOLOS ~n'),A is 0,!.
 
-buscaEquipa(NOME,E1,_,NUMERO):-equipa(E1,NOME,_,_),NUMERO is E1,!.
-buscaEquipa(NOME,_,E2,NUMERO):-equipa(E2,NOME,_,_),NUMERO is E2,!.
+buscaEquipa(NOME,E1,_,NUMERO):-equipa(E1,NOME,_,_,_),NUMERO is E1,!.
+buscaEquipa(NOME,_,E2,NUMERO):-equipa(E2,NOME,_,_,_),NUMERO is E2,!.
 buscaEquipa(_,_,_,NUMERO):-NUMERO is 0,!.
 
 atribuirGolo(JORN,NUMJOGO,DATA,E1,GOL1,E2,GOL2,ESTADO,NUMEQUIPA,NUM_GOLS,R):-
                 NUMEQUIPA = E1,
+                jogo(JORN,NUMJOGO,DATA,E1,GOL1,E2,GOL2,ESTADO),
+                NUM_GOLOS is GOL1 + NUM_GOLS,
                 retract(jogo(JORN,NUMJOGO,DATA,E1,GOL1,E2,GOL2,ESTADO)),
-                assertz(jogo(JORN,NUMJOGO,DATA,E1,NUM_GOLS,E2,GOL2,ESTADO)),
+                assertz(jogo(JORN,NUMJOGO,DATA,E1,NUM_GOLOS,E2,GOL2,ESTADO)),
                 R is 1,!.
 
 atribuirGolo(JORN,NUMJOGO,DATA,E1,GOL1,E2,GOL2,ESTADO,NUMEQUIPA,NUM_GOLS,R):-
                 NUMEQUIPA = E2,
+                jogo(JORN,NUMJOGO,DATA,E1,GOL1,E2,GOL2,ESTADO),
+                NUM_GOLOS is GOL1 + NUM_GOLS,
                 retract(jogo(JORN,NUMJOGO,DATA,E1,GOL1,E2,GOL2,ESTADO)),
-                assertz(jogo(JORN,NUMJOGO,DATA,E1,GOL1,E2,NUM_GOLS,ESTADO)),
+                assertz(jogo(JORN,NUMJOGO,DATA,E1,GOL1,E2,NUM_GOLOS,ESTADO)),
                 R is 1,!.
 
 atribuirGolo(_,_,_,_,_,_,_,_,_,_,R):-
                 R is 0,!.
+
+atribuir_pontuacao(E1,GOL1,E2,GOL2,R):- GOL1 > GOL2,
+                                    adicionar_ponto(3,E1),
+                                    R is 1,!.
+atribuir_pontuacao(E1,GOL1,E2,GOL2,R):- GOL1 < GOL2,
+                                    adicionar_ponto(3,E2),
+                                    R is 1,!.
+atribuir_pontuacao(E1,GOL1,E2,GOL2,R):- GOL1 = GOL2,
+                                    adicionar_ponto(1,E1),
+                                    adicionar_ponto(1,E2),
+                                    R is 1,!.
+atribuir_pontuacao(E1,GOL1,E2,GOL2,R):-R is 0,!.
+
+adicionar_ponto(PONTO,EQUIPA):- equipa(EQUIPA,NOM,FUN,TIT,PTS),
+                                NEW_PT is PTS + PONTO,
+                                retract(equipa(EQUIPA,NOM,FUN,TIT,PTS)),
+                                assertz(equipa(EQUIPA,NOM,FUN,TIT,NEW_PT)),write('Pontos adicionados'),
+                                !.
 
 atualiza_total_jornadas(TOTAL):-
                                 N is TOTAL+1,
@@ -333,30 +358,30 @@ adicionar_jornada(X):-
                     assertz(jornada(N)).
 
 % --- LISTAGENS ---
-listarEquipas:- equipa(NU,NO,FU,TI),
+listarEquipas:- equipa(NU,NO,FU,TI,PON),
                 format('~n[ ~w - ~w - ~w - ~w ]~n',[NU,NO,FU,TI]),fail.
 
 listarJogadores:- jogador(NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,POS_P,GOL_P,TEAM), 
-                equipa(TEAM,NOM_T,_,_),
+                equipa(TEAM,NOM_T,_,_,_),
                 format('~n[ ~w - ~w - ~w - ~w - ~w - ~w - ~w - ~w - ~w]~n',[NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,POS_P,GOL_P,NOM_T]),fail.
                     
 
 listarTreinadores:- treinador(NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,TEAM), 
-                equipa(TEAM,NOM_T,_,_),
+                equipa(TEAM,NOM_T,_,_,_),
                 format('~n[ ~w - ~w - ~w - ~w - ~w - ~w - ~w ]~n',[NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,NOM_T]),fail.
                     
 listarUmaEquipa(NUM_TEAM):-format('~n-----------------------~n'),
-                            equipa(NUM_TEAM,NO,FU,TI),
+                            equipa(NUM_TEAM,NO,FU,TI,PO),
                             format('NOME DA EQUIPA:  ~w ~n',[NO]),
                             format('ANO DE FUNDACAO: ~w ~n',[FU]),
                             format('QTD DE TITULOS:  ~w ~n',[TI]),
                             format('-----------------------~n'),fail.
-listarUmaEquipa(NUM_TEAM):-treinador(_,NOM_T,_,_,_,_,NUM_TEAM),equipa(NUM_TEAM,_,_,_),
+listarUmaEquipa(NUM_TEAM):-treinador(_,NOM_T,_,_,_,_,NUM_TEAM),equipa(NUM_TEAM,_,_,_,_),
                             format('~n[TREINADOR:  ~w ]~n',[NOM_T]),fail.
 
 listarUmaEquipa(NUM_TEAM):-format('~n[JOGADORES]~n'),
                             jogador(_,NOM_P,_,_,_,_,POS_P,_,NUM_TEAM), 
-                            equipa(NUM_TEAM,_,_,_),
+                            equipa(NUM_TEAM,_,_,_,_),
                             format('~n» ~w - ~w ~n',[NOM_P,POS_P]),fail.
 
 listarUmaEquipa(_):-format('~n-----------------------~n'),
@@ -365,8 +390,8 @@ listarUmaEquipa(_):-format('~n-----------------------~n'),
 listar_jogos:-  jornada(J),
                 format('~n~n [JORNADA ~w] ~n',[J]),
                 jogo(J,_,_,EQUIPA1,_,EQUIPA2,_,_), 
-                equipa(EQUIPA1,NOME1,_,_),
-                equipa(EQUIPA2,NOME2,_,_),
+                equipa(EQUIPA1,NOME1,_,_,_),
+                equipa(EQUIPA2,NOME2,_,_,_),
                 format('~n» ~w - ~w ~n',[NOME1,NOME2]),fail.
 
 listar_jogos:-format('~n-----------------------~n'),
@@ -377,8 +402,8 @@ listar_jogos_marcados:-  jornada(J),
                 format('~n~n [JORNADA ~w] ~n',[J]),
                 jogo(J,NUM,_,EQUIPA1,_,EQUIPA2,_,E),
                 E = 0, 
-                equipa(EQUIPA1,NOME1,_,_),
-                equipa(EQUIPA2,NOME2,_,_),
+                equipa(EQUIPA1,NOME1,_,_,_),
+                equipa(EQUIPA2,NOME2,_,_,_),
                 format('~n ~w» [~w - ~w] ~n',[NUM,NOME1,NOME2]),fail.
 
 listar_jogos_marcados:-format('~n-----------------------~n'),!.
@@ -387,8 +412,8 @@ listar_jogos_iniciados:-  jornada(J),
                 format('~n~n [JORNADA ~w] ~n',[J]),
                 jogo(J,NUM,_,EQUIPA1,_,EQUIPA2,_,E),
                 E = 1, 
-                equipa(EQUIPA1,NOME1,_,_),
-                equipa(EQUIPA2,NOME2,_,_),
+                equipa(EQUIPA1,NOME1,_,_,_),
+                equipa(EQUIPA2,NOME2,_,_,_),
                 format('~n ~w» [~w - ~w] ~n',[NUM,NOME1,NOME2]),fail.
 
 listar_jogos_iniciados:-format('~n-----------------------~n'),!.
@@ -398,15 +423,15 @@ listar_jogos_terminados:-  jornada(J),
                 format('~n~n [JORNADA ~w] ~n',[J]),
                 jogo(J,NUM,_,EQUIPA1,GOL1,EQUIPA2,GOL2,E),
                 E = 2, 
-                equipa(EQUIPA1,NOME1,_,_),
-                equipa(EQUIPA2,NOME2,_,_),
+                equipa(EQUIPA1,NOME1,_,_,_),
+                equipa(EQUIPA2,NOME2,_,_,_),
                 format('~n ~w« ~w (~w) - (~w) ~w ~n',[NUM,NOME1,GOL1,GOL2,NOME2]),fail.
 
 listar_jogos_terminados:-format('~n-----------------------~n'),!.
 
 
 listar_jogadores_da_equipa(NUMERO_EQUIPA):-
-                                        equipa(NUMERO_EQUIPA,NOM,_,_),
+                                        equipa(NUMERO_EQUIPA,NOM,_,_,_),
                                         format('~n Jogadores da equipa ~w~n',[NOM]),
                                         jogador(COD,NOME,_,_,_,_,_,_,NUMERO_EQUIPA),
                                         format('~n~w ~w',[COD,NOME]),fail.

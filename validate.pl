@@ -1,6 +1,6 @@
 
 % --- Validacoes ---
-team_exists(X,R):-equipa(X,_,_,_),R is 1,!.
+team_exists(X,R):-equipa(X,_,_,_,_),R is 1,!.
 team_exists(_,R):-R is 0.
 
 jornada_exists(X,R):-jornada(X),R is 1,!.
