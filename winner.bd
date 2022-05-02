@@ -1,0 +1,4 @@
+:- dynamic winner/2.
+
+winner(1, 7).
+

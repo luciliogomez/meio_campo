@@ -15,8 +15,7 @@ open_menu(2,A):- repeat,
                 A is 0,!.
 open_menu(3,A):- repeat,
                 statistics_menu,
-                pergunta("Deseja Sair? [s/n]~n",R),
-                R=s,A is 0,!.
+                A is 0,!.
 open_menu(4,1).
 
 open_menu(now,A):- repeat,
@@ -128,14 +127,53 @@ team_menu_option(7,A):-format('~n    *** LISTAR UMA EQUIPA *** ~n'),
                     A is 0,!.
 team_menu_option(7,A):-pergunta("~n --- EQUIPA NÃO ENCONTRADA --- ~n~n    Pressione [Enter]~n",_),
                     A is 0,!.
+team_menu_option(8,A):-format('~n *** PONTUACAO DAS EQUIPAS *** ~n'),
+                    ver_pontuacao,
+                    pergunta('Digite [Enter]',_),
+                    A is 0,!.
 
 statistics_menu:-
+    repeat,
     format('~n*** ESTATISTICA  *** ~n'),
     format('-------------~n'),
     format('1- TABELA CLASSIFICATIVA ~n'),
     format('2- VENCEDOR ~n'),
     format('3- MELHOR MARCADOR ~n'),
-    format('4- SAIR ~n~n').
+    format('0- VOLTAR ~n~n'),
+    pergunta('Digite a opcao: ~n',R),
+    statistics_menu_option(R,A),
+    A = 1,!.
+
+statistics_menu_option(0,1):-!.
+statistics_menu_option(1,A):-format('~n*** TABELA CLASSIFICATIVA ***~n'), 
+                            ver_pontuacao,
+                            A is 0,!.
+
+statistics_menu_option(2,A):-format('~n*** VENCEDOR DO CAMPEONATO ***~n'), 
+                            is_campeonado_closed(R),
+                            R = 1,
+                            winner(EQUI,PTS),
+                            equipa(EQUI,NOME,_,_,PO),
+                            format('~n~n~n~w com ~w pontos!!!~n~n',[NOME,PTS]),
+                            pergunta('~nDigite [Enter]~n',_),
+                            A is 0,!.
+
+statistics_menu_option(2,A):- 
+                            pergunta('~nDigite [Enter]~n',_),
+                            A is 0,!.
+
+
+is_campeonado_closed(R):- jornada(J),
+                        jogo(J,_,_,_,_,_,_,ES),
+                        ES = 0,
+                        format('~n~nCAMPEONATO AINDA NÃO ACABOU. ~nFALTAM JOGOS POR SE REALIZAR!!'),
+                        R is 0,!.
+is_campeonado_closed(R):- jornada(J),
+                        jogo(J,_,_,_,_,_,_,ES),
+                        ES = 1,
+                        format('~n~nCAMPEONATO AINDA NÃO ACABOU. ~nFALTAM JOGOS POR TERMINAR!!'),
+                        R is 0,!.
+is_campeonado_closed(R):- R is 1,!.
 
 
 main_menu:-
@@ -264,6 +302,7 @@ gamenow_menu_option(3,A):-format('~n *** TERMINAR UM JOGO *** ~n'),
                 R = 1,
                 salva(jogo,'jogos.bd'),
                 salva(equipa,'equipas.bd'),
+                salva(winner,'winner.bd'),
                 pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
 
@@ -320,21 +359,36 @@ atribuirGolo(_,_,_,_,_,_,_,_,_,_,R):-
 
 atribuir_pontuacao(E1,GOL1,E2,GOL2,R):- GOL1 > GOL2,
                                     adicionar_ponto(3,E1),
+                                    maior_ponto(E1),
                                     R is 1,!.
 atribuir_pontuacao(E1,GOL1,E2,GOL2,R):- GOL1 < GOL2,
                                     adicionar_ponto(3,E2),
+                                    maior_ponto(E2),
                                     R is 1,!.
 atribuir_pontuacao(E1,GOL1,E2,GOL2,R):- GOL1 = GOL2,
                                     adicionar_ponto(1,E1),
+                                    maior_ponto(E1),
                                     adicionar_ponto(1,E2),
+                                    maior_ponto(E2),
                                     R is 1,!.
 atribuir_pontuacao(E1,GOL1,E2,GOL2,R):-R is 0,!.
 
 adicionar_ponto(PONTO,EQUIPA):- equipa(EQUIPA,NOM,FUN,TIT,PTS),
                                 NEW_PT is PTS + PONTO,
                                 retract(equipa(EQUIPA,NOM,FUN,TIT,PTS)),
-                                assertz(equipa(EQUIPA,NOM,FUN,TIT,NEW_PT)),write('Pontos adicionados'),
+                                assertz(equipa(EQUIPA,NOM,FUN,TIT,NEW_PT)),
                                 !.
+
+maior_ponto(EQUIPA):- 
+                    winner(EQ,PT),
+                    equipa(EQUIPA,NOM,FUN,TIT,PTS),
+                    PTS > PT,
+                    retract(winner(EQ,PT)),
+                    assertz(winner(EQUIPA,PTS)),
+                    !.
+maior_ponto(EQUIPA):-!.
+                    
+
 
 atualiza_total_jornadas(TOTAL):-
                                 N is TOTAL+1,
@@ -440,6 +494,11 @@ listar_jogadores_da_equipa(_):-format('~n-----------------------~n'),
                                 pergunta('~nDigite [Enter]~n',_),!.
                             
 
+ver_pontuacao:- equipa(_,NO,_,_,PON),
+                format('~n » ~w : ~w pts ~n',[NO,PON]),fail.
+
+ver_pontuacao:- format('~n-------------~n'),
+                pergunta("Digite [Enter]",_),!.
 
 
 
@@ -452,6 +511,7 @@ carregaDados:- carrega('equipas.bd'),
                 carrega('total_jornadas.bd'),
                 carrega('total_equipas.bd'),
                 carrega('total_jogos.bd'),
+                carrega('winner.bd'),
                 carrega('menus.pl'),
                 carrega('helpers.pl'),
                 carrega('validate.pl').
