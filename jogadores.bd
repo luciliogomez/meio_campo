@@ -1,18 +1,5 @@
 :- dynamic jogador/9.
 
-jogador('Eliude', 'Eliude', 23, 4, 3, 3, 3, 3, 1).
-jogador(3, 'Marcos', 23, 34, 23, m, rr, 3, 45).
-jogador(3, rrrrrr, 33, 33, 33, m, e, 4, 34).
-jogador(33, e, 3, 3, 3, e, 4, 5, 33).
-jogador(ee, ee, 3, 3, 3, e, 3, 3, 33).
-jogador(2, 2, 22, 2, 2, 2, 2, 2, 2).
-jogador(1, 'Lucilio', 23, 1.56, 45.6, 'M', 'Central', 3, 1).
-jogador(15, 'Lucas', 23, 22, 22, g, rr, 0, 23).
-jogador(3, 'Edson', 34, 22.3, 50, 'M', 'Avancado', 7, 2).
-jogador(45, 'Julio', 23, 2, 45, m, av, 6, 3).
-jogador(5, 'Lucas', 43, 3, 3, m, 4, 6, 2).
-jogador(2, 'Ludmilo', 24, 2.4, 55.3, 'M', 'Avancado', 9, 1).
-jogador(3, 'KIKO', 44, 3, 34, 'M', 'AV', 6, 2).
-jogador(46, 'Manuel', 34, 3, 34, m, av, 3, 3).
-jogador(10, 'Victor', 23, 2, 45, m, 0, 4, 4).
+jogador(numero,numero_da_camisola, nome, idade, altura, peso, genero, posicao, golos, equipa).
+jogador(1,10, 'JOAO', 22, 22, 22, 'M', 'A', 2, 1).
 

@@ -45,12 +45,13 @@ team_menu:-
 
 team_menu_option(9,1):-!.
 team_menu_option(1,A):-format('~n *** CADASTRAR EQUIPA *** ~n'),
-                pergunta("Numero Da Equipa:~n",NUMERO),
+                total_equipas(TOTAL), N is TOTAL+1,
                 pergunta("Nome Da Equipa:~n",NOME),
                 pergunta("Data de Fundacao:~n",FUNDACAO),
                 pergunta("Numero de titulos:~n",TITULOS),
-                assertz(equipa(NUMERO,NOME,FUNDACAO,TITULOS,0)),
-                total_equipas(TOTAL), N is TOTAL+1,
+                is_valid_team(N,NOME,FUNDACAO,TITULOS,R),
+                R = 1,
+                assertz(equipa(N,NOME,FUNDACAO,TITULOS,0)),
                 retract(total_equipas(TOTAL)),
                 assertz(total_equipas(N)),
                 format('~n ---  EQUIPA ADICIONADA --- ~n'),
@@ -58,6 +59,10 @@ team_menu_option(1,A):-format('~n *** CADASTRAR EQUIPA *** ~n'),
                 salva(total_equipas,'total_equipas.bd'),
                 pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
+team_menu_option(1,A):-
+                    pergunta("~n Pressione [Enter]",_),
+                    A is 0,!.
+
 
 team_menu_option(2,A):-format('~n *** CADASTRAR JOGADOR *** ~n'),
                 pergunta("Numero Da Equipa:~n",NUMERO_TEAM),
@@ -153,7 +158,7 @@ statistics_menu_option(2,A):-format('~n*** VENCEDOR DO CAMPEONATO ***~n'),
                             is_campeonado_closed(R),
                             R = 1,
                             winner(EQUI,PTS),
-                            equipa(EQUI,NOME,_,_,PO),
+                            equipa(EQUI,NOME,_,_,_),
                             format('~n~n~n~w com ~w pontos!!!~n~n',[NOME,PTS]),
                             pergunta('~nDigite [Enter]~n',_),
                             A is 0,!.
@@ -162,6 +167,27 @@ statistics_menu_option(2,A):-
                             pergunta('~nDigite [Enter]~n',_),
                             A is 0,!.
 
+
+statistics_menu_option(3,A):-format('~n*** MELHOR MARCADOR ***~n'), 
+                            melhor_marcador,
+                            best(TEAM,PLAYER,GOLS),
+                            equipa(TEAM,NOME,_,_,_),
+                            format('~n~n[~w ~w ~w]~n~n',[NOME,PLAYER,GOLS]),
+                            pergunta('~nDigite [Enter]~n',_),
+                            A is 0,!.
+
+
+melhor_marcador:-
+                jogador(_,NO,_,_,_,_,_,GOLOS,EQUIPA),
+                format(' ~n PLAYER: ~w~n',[NO]),
+                best(B_EQ,B_JOGADOR,B_GOL),
+                GOLOS > B_GOL,
+                retract(best(B_EQ,B_JOGADOR,B_GOL)),
+                assertz(best(EQUIPA,NO,GOLOS)),
+                salva(best,'best.bd'),
+                format(' ~n PLAYER BEST: ~w~n',[NO]).
+
+melhor_marcador:-write('').
 
 is_campeonado_closed(R):- jornada(J),
                         jogo(J,_,_,_,_,_,_,ES),
@@ -357,11 +383,11 @@ atribuirGolo(JORN,NUMJOGO,DATA,E1,GOL1,E2,GOL2,ESTADO,NUMEQUIPA,NUM_GOLS,R):-
 atribuirGolo(_,_,_,_,_,_,_,_,_,_,R):-
                 R is 0,!.
 
-atribuir_pontuacao(E1,GOL1,E2,GOL2,R):- GOL1 > GOL2,
+atribuir_pontuacao(E1,GOL1,_,GOL2,R):- GOL1 > GOL2,
                                     adicionar_ponto(3,E1),
                                     maior_ponto(E1),
                                     R is 1,!.
-atribuir_pontuacao(E1,GOL1,E2,GOL2,R):- GOL1 < GOL2,
+atribuir_pontuacao(_,GOL1,E2,GOL2,R):- GOL1 < GOL2,
                                     adicionar_ponto(3,E2),
                                     maior_ponto(E2),
                                     R is 1,!.
@@ -371,7 +397,7 @@ atribuir_pontuacao(E1,GOL1,E2,GOL2,R):- GOL1 = GOL2,
                                     adicionar_ponto(1,E2),
                                     maior_ponto(E2),
                                     R is 1,!.
-atribuir_pontuacao(E1,GOL1,E2,GOL2,R):-R is 0,!.
+atribuir_pontuacao(_,_,_,_,R):-R is 0,!.
 
 adicionar_ponto(PONTO,EQUIPA):- equipa(EQUIPA,NOM,FUN,TIT,PTS),
                                 NEW_PT is PTS + PONTO,
@@ -381,12 +407,12 @@ adicionar_ponto(PONTO,EQUIPA):- equipa(EQUIPA,NOM,FUN,TIT,PTS),
 
 maior_ponto(EQUIPA):- 
                     winner(EQ,PT),
-                    equipa(EQUIPA,NOM,FUN,TIT,PTS),
+                    equipa(EQUIPA,_,_,_,PTS),
                     PTS > PT,
                     retract(winner(EQ,PT)),
                     assertz(winner(EQUIPA,PTS)),
                     !.
-maior_ponto(EQUIPA):-!.
+maior_ponto(_):-!.
                     
 
 
@@ -412,7 +438,7 @@ adicionar_jornada(X):-
                     assertz(jornada(N)).
 
 % --- LISTAGENS ---
-listarEquipas:- equipa(NU,NO,FU,TI,PON),
+listarEquipas:- equipa(NU,NO,FU,TI,_),
                 format('~n[ ~w - ~w - ~w - ~w ]~n',[NU,NO,FU,TI]),fail.
 
 listarJogadores:- jogador(NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,POS_P,GOL_P,TEAM), 
@@ -425,7 +451,7 @@ listarTreinadores:- treinador(NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,TEAM),
                 format('~n[ ~w - ~w - ~w - ~w - ~w - ~w - ~w ]~n',[NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,NOM_T]),fail.
                     
 listarUmaEquipa(NUM_TEAM):-format('~n-----------------------~n'),
-                            equipa(NUM_TEAM,NO,FU,TI,PO),
+                            equipa(NUM_TEAM,NO,FU,TI,_),
                             format('NOME DA EQUIPA:  ~w ~n',[NO]),
                             format('ANO DE FUNDACAO: ~w ~n',[FU]),
                             format('QTD DE TITULOS:  ~w ~n',[TI]),
@@ -512,6 +538,7 @@ carregaDados:- carrega('equipas.bd'),
                 carrega('total_equipas.bd'),
                 carrega('total_jogos.bd'),
                 carrega('winner.bd'),
+                carrega('best.bd'),
                 carrega('menus.pl'),
                 carrega('helpers.pl'),
                 carrega('validate.pl').

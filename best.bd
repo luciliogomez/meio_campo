@@ -1,0 +1,4 @@
+:- dynamic best/3.
+
+best(team, nome, 0).
+

@@ -25,6 +25,12 @@ is_valid_player(_,_,_,_,_,_,_,_,_,R):- R is 1,!.
 is_valid_age(AGE):- AGE >= 10, AGE =< 45.
 
 
+is_valid_team(N,_,_,_,R):-team_exists(N,A), A = 1, format('~n --- FALHA: NUMERO DA EQUIPA DUPLICADA ---~n'),R is 0,!.
+is_valid_team(_,NOME,_,_,R):-equipa(_,NO,_,_,_),NO = NOME, format('~n --- FALHA: NOME DE EQUIPA DUPLICADO ---~n'),R is 0,!.                
+is_valid_team(_,_,_,_,R):-R is 1,!.                
+
+
+
 is_valid_game(_,EQUIPA1,_,R):-team_exists(EQUIPA1,A),
                                         A \= 1,
                                         format('~n --- FALHA: EQUIPA [~W] NÃO ENCONTRADA. --- ~n',[EQUIPA1]),
