@@ -22,7 +22,13 @@ is_camisola_valid(NUMERO_TEAM,CAMISOLA,R):- equipa(NUMERO_TEAM,_,_,_,_),
                                             CAM = CAMISOLA,
                                             format('~n --- FALHA: NUMERO DE CAMISOLA DUPLICADO --- ~n --- NUMERO JA ATRIBUIDO A  OUTRO JOGADOR DA EQUIPA --- ~n'),
                                             R is 0,!.
-is_camisola_valid(NUMERO_TEAM,CAMISOLA):-R is 1.
+is_camisola_valid(NUMERO_TEAM,CAMISOLA,R):-R is 1,!.
+
+is_valid_genero(GEN,R):- GEN = 'M',R is 1,!.
+is_valid_genero(GEN,R):- GEN = 'm',R is 1,!.
+is_valid_genero(GEN,R):- GEN = 'F',R is 1,!.
+is_valid_genero(GEN,R):- GEN = 'f',R is 1,!.
+is_valid_genero(_,R):- format('~n --- ERRO: GENERO INVÁLIDO ~n '),R is 0,!.
 
 
 is_valid_player(NUM_TEAM,_,_,_,_,_,_,_,_,R):- team_exists(NUM_TEAM,A), A \= 1,format('~n --- FALHA: Equipa não existe. --- ~n'),R is 0,!.
