@@ -76,6 +76,16 @@ is_valid_game(JORNADA,_,EQUIPA2,R):- team_has_players(EQUIPA2,H),H = 0,
                                         format('~n --- FALHA: EQUIPA ~w NÃO TEM JOGADORES. --- ~n',[NO]),
                                         R is 0,!.
 
+is_valid_game(JORNADA,EQUIPA1,_,R):- team_has_coach(EQUIPA1,H),H = 0,
+                                        equipa(EQUIPA1,NO,_,_,_),
+                                        format('~n --- FALHA: EQUIPA ~w NÃO TEM TREINADOR. --- ~n',[NO]),
+                                        R is 0,!.
+
+is_valid_game(JORNADA,_,EQUIPA2,R):- team_has_coach(EQUIPA2,H),H = 0,
+                                        equipa(EQUIPA2,NO,_,_,_),
+                                        format('~n --- FALHA: EQUIPA ~w NÃO TEM TREINADOR. --- ~n',[NO]),
+                                        R is 0,!.
+
 is_valid_game(JORNADA,_,_,R):-jornada_exists(JORNADA,A),
                                         A \= 1,
                                         format('~n --- FALHA: JORNADA NÃO ENCONTRADA. ~n     DICA: Informe outra jornada ou crie uma. --- ~n'),
@@ -86,3 +96,6 @@ is_valid_game(_,_,_,R):- R is 1,!.
 
 team_has_players(TEAM,R):-equipa(TEAM,_,_,_,5), jogador(_,_,_,_,_,_,_,_,_,TEAM),R is 1,!.
 team_has_players(TEAM,R):-R is 0,!.
+
+team_has_coach(TEAM,R):-equipa(TEAM,_,_,_,5), treinador(_,_,_,_,_,_,TEAM),R is 1,!.
+team_has_coach(TEAM,R):-R is 0,!.

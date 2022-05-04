@@ -1,4 +1,4 @@
 :- dynamic total_jogadores/1.
 
-total_jogadores(0).
+total_jogadores(1).
 
