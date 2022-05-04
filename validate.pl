@@ -18,11 +18,11 @@ adversario_invalido(J,EQUIPA1,EQUIPA2):-
                                         ).
 
 is_camisola_valid(NUMERO_TEAM,CAMISOLA,R):- equipa(NUMERO_TEAM,_,_,_,_),
-                                            jogador(NUM,CAM,_,_,_,_,_,_,_,NUMERO_TEAM),
+                                            jogador(_,CAM,_,_,_,_,_,_,_,NUMERO_TEAM),
                                             CAM = CAMISOLA,
                                             format('~n --- FALHA: NUMERO DE CAMISOLA DUPLICADO --- ~n --- NUMERO JA ATRIBUIDO A  OUTRO JOGADOR DA EQUIPA --- ~n'),
                                             R is 0,!.
-is_camisola_valid(NUMERO_TEAM,CAMISOLA,R):-R is 1,!.
+is_camisola_valid(_,_,R):-R is 1,!.
 
 is_valid_genero(GEN,R):- GEN = 'M',R is 1,!.
 is_valid_genero(GEN,R):- GEN = 'm',R is 1,!.
@@ -66,22 +66,22 @@ is_valid_game(JORNADA,EQUIPA1,EQUIPA2,R):-adversario_invalido(JORNADA,EQUIPA2,EQ
                                         format('~n --- FALHA: ADVERSARIO INVALIDO.     DICA: Escolhe outro adversario ou crie uma nova jornada. --- ~n'),
                                         R is 0,!.
 
-is_valid_game(JORNADA,EQUIPA1,_,R):- team_has_players(EQUIPA1,H),H = 0,
+is_valid_game(_,EQUIPA1,_,R):- team_has_players(EQUIPA1,H),H = 0,
                                         equipa(EQUIPA1,NO,_,_,_),
                                         format('~n --- FALHA: EQUIPA ~w NÃO TEM JOGADORES. --- ~n',[NO]),
                                         R is 0,!.
 
-is_valid_game(JORNADA,_,EQUIPA2,R):- team_has_players(EQUIPA2,H),H = 0,
+is_valid_game(_,_,EQUIPA2,R):- team_has_players(EQUIPA2,H),H = 0,
                                         equipa(EQUIPA2,NO,_,_,_),
                                         format('~n --- FALHA: EQUIPA ~w NÃO TEM JOGADORES. --- ~n',[NO]),
                                         R is 0,!.
 
-is_valid_game(JORNADA,EQUIPA1,_,R):- team_has_coach(EQUIPA1,H),H = 0,
+is_valid_game(_,EQUIPA1,_,R):- team_has_coach(EQUIPA1,H),H = 0,
                                         equipa(EQUIPA1,NO,_,_,_),
                                         format('~n --- FALHA: EQUIPA ~w NÃO TEM TREINADOR. --- ~n',[NO]),
                                         R is 0,!.
 
-is_valid_game(JORNADA,_,EQUIPA2,R):- team_has_coach(EQUIPA2,H),H = 0,
+is_valid_game(_,_,EQUIPA2,R):- team_has_coach(EQUIPA2,H),H = 0,
                                         equipa(EQUIPA2,NO,_,_,_),
                                         format('~n --- FALHA: EQUIPA ~w NÃO TEM TREINADOR. --- ~n',[NO]),
                                         R is 0,!.
@@ -95,7 +95,7 @@ is_valid_game(_,_,_,R):- R is 1,!.
 
 
 team_has_players(TEAM,R):-equipa(TEAM,_,_,_,5), jogador(_,_,_,_,_,_,_,_,_,TEAM),R is 1,!.
-team_has_players(TEAM,R):-R is 0,!.
+team_has_players(_,R):-R is 0,!.
 
 team_has_coach(TEAM,R):-equipa(TEAM,_,_,_,5), treinador(_,_,_,_,_,_,TEAM),R is 1,!.
-team_has_coach(TEAM,R):-R is 0,!.
+team_has_coach(_,R):-R is 0,!.
