@@ -1,4 +1,4 @@
 :- dynamic winner/2.
 
-winner(team, pontos).
+winner(1, 2).
 

@@ -1,9 +1,7 @@
-:- dynamic jogador/9.
 
-jogador(1, 'JOAO', 22, 1, 33, 'M', 'AV', 0, 1).
 
 :- dynamic jogador/10.
 
-jogador(numero, numero_da_camisola, nome, idade, altura, peso, genero, posicao, golos, equipa).
+%jogador(numero, numero_da_camisola, nome, idade, altura, peso, genero, posicao, golos, equipa).
 jogador(1, 10, 'JOAO', 22, 22, 22, 'M', 'A', 2, 1).
 

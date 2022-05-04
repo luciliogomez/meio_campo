@@ -1,7 +1,6 @@
 :- dynamic jornada/1.
 
 jornada(1).
-jornada(1).
 jornada(2).
 jornada(3).
 jornada(4).

@@ -79,7 +79,7 @@ team_menu_option(2,A):-format('~n *** CADASTRAR JOGADOR *** ~n'),
                 is_valid_genero(GENERO,R), R = 1,
                 pergunta("Posicao:~n",POSICAO),
                 pergunta("Numero de Golos:~n",GOLOS),
-                assertz(jogador(NUMERO_PLAYER,NOME,IDADE,ALTURA,PESO,GENERO,POSICAO,GOLOS,NUMERO_TEAM)),
+                assertz(jogador(NUMERO_PLAYER,CAMISOLA,NOME,IDADE,ALTURA,PESO,GENERO,POSICAO,GOLOS,NUMERO_TEAM)),
                 format('~n ---  JOGADOR ADICIONADO --- ~n'),
                 salva(jogador,'jogadores.bd'),
                 pergunta("~n Pressione [Enter]",_),
@@ -181,14 +181,12 @@ statistics_menu_option(3,A):-format('~n*** MELHOR MARCADOR ***~n'),
 
 
 melhor_marcador:-
-                jogador(_,NO,_,_,_,_,_,GOLOS,EQUIPA),
-                format(' ~n PLAYER: ~w~n',[NO]),
+                jogador(_,_,NO,_,_,_,_,_,GOLOS,EQUIPA),
                 best(B_EQ,B_JOGADOR,B_GOL),
                 GOLOS > B_GOL,
                 retract(best(B_EQ,B_JOGADOR,B_GOL)),
                 assertz(best(EQUIPA,NO,GOLOS)),
-                salva(best,'best.bd'),
-                format(' ~n PLAYER BEST: ~w~n',[NO]).
+                salva(best,'best.bd').
 
 melhor_marcador:-write('').
 
@@ -348,13 +346,13 @@ gamenow_menu_option(2,A):-format('~n *** ATRIBUIR GOLOS *** ~n'),
                 NUMERO_EQUIPA \= 0,
                 listar_jogadores_da_equipa(NUMERO_EQUIPA),
                 pergunta("Indique o numero do Jogador:~n",NUMERO_DO_JOGADOR),
-                jogador(NUMERO_DO_JOGADOR,NOME_DO_JOGADOR,ALT,PES,GEN,IDA,POS,GOLS,NUMERO_EQUIPA),
+                jogador(NUMERO_DO_JOGADOR,CAMISOLA,NOME_DO_JOGADOR,ALT,PES,GEN,IDA,POS,GOLS,NUMERO_EQUIPA),
                 pergunta("Quantos Golos:~n",NUM_GOLS),
                 atribuirGolo(JORNADA,NUMERO_DO_JOGO,DATA,EQUIPA1,GOLOS1,EQUIPA2,GOLOS2,ESTADO,NUMERO_EQUIPA,NUM_GOLS,R),
                 R = 1,
                 QTD_GOLS is GOLS + NUM_GOLS,
-                retract(jogador(NUMERO_DO_JOGADOR,NOME_DO_JOGADOR,ALT,PES,GEN,IDA,POS,GOLS,NUMERO_EQUIPA)),
-                assertz(jogador(NUMERO_DO_JOGADOR,NOME_DO_JOGADOR,ALT,PES,GEN,IDA,POS,QTD_GOLS,NUMERO_EQUIPA)),
+                retract(jogador(NUMERO_DO_JOGADOR,CAMISOLA,NOME_DO_JOGADOR,ALT,PES,GEN,IDA,POS,GOLS,NUMERO_EQUIPA)),
+                assertz(jogador(NUMERO_DO_JOGADOR,CAMISOLA,NOME_DO_JOGADOR,ALT,PES,GEN,IDA,POS,QTD_GOLS,NUMERO_EQUIPA)),
                 format('~n ---  CONCLUIDO --- ~n'),
                 salva(jogo,'jogos.bd'),
                 salva(jogador,'jogadores.bd'),
@@ -444,9 +442,9 @@ adicionar_jornada(X):-
 listarEquipas:- equipa(NU,NO,FU,TI,_),
                 format('~n[ ~w - ~w - ~w - ~w ]~n',[NU,NO,FU,TI]),fail.
 
-listarJogadores:- jogador(NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,POS_P,GOL_P,TEAM), 
+listarJogadores:- jogador(NUM_P,CAMISOLA,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,POS_P,GOL_P,TEAM), 
                 equipa(TEAM,NOM_T,_,_,_),
-                format('~n[ ~w - ~w - ~w - ~w - ~w - ~w - ~w - ~w - ~w]~n',[NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,POS_P,GOL_P,NOM_T]),fail.
+                format('~n[ ~w - ~w - ~w - ~w - ~w - ~w - ~w - ~w - ~w - ~w]~n',[NUM_P,CAMISOLA,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,POS_P,GOL_P,NOM_T]),fail.
                     
 
 listarTreinadores:- treinador(NUM_P,NOM_P,AGE_P,ALT_P,PESO_P,GEN_P,TEAM), 
@@ -463,7 +461,7 @@ listarUmaEquipa(NUM_TEAM):-treinador(_,NOM_T,_,_,_,_,NUM_TEAM),equipa(NUM_TEAM,_
                             format('~n[TREINADOR:  ~w ]~n',[NOM_T]),fail.
 
 listarUmaEquipa(NUM_TEAM):-format('~n[JOGADORES]~n'),
-                            jogador(_,NOM_P,_,_,_,_,POS_P,_,NUM_TEAM), 
+                            jogador(_,_,NOM_P,_,_,_,_,POS_P,_,NUM_TEAM), 
                             equipa(NUM_TEAM,_,_,_,_),
                             format('~n» ~w - ~w ~n',[NOM_P,POS_P]),fail.
 
@@ -516,8 +514,8 @@ listar_jogos_terminados:-format('~n-----------------------~n'),!.
 listar_jogadores_da_equipa(NUMERO_EQUIPA):-
                                         equipa(NUMERO_EQUIPA,NOM,_,_,_),
                                         format('~n Jogadores da equipa ~w~n',[NOM]),
-                                        jogador(COD,NOME,_,_,_,_,_,_,NUMERO_EQUIPA),
-                                        format('~n~w ~w',[COD,NOME]),fail.
+                                        jogador(COD,CAMISOLA,NOME,_,_,_,_,_,_,NUMERO_EQUIPA),
+                                        format('~n~w ~w ~w',[COD,CAMISOLA,NOME]),fail.
                                         
 listar_jogadores_da_equipa(_):-format('~n-----------------------~n'),
                                 pergunta('~nDigite [Enter]~n',_),!.
