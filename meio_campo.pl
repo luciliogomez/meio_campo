@@ -518,7 +518,8 @@ listar_jogos_terminados:-  jornada(J),
                 equipa(EQUIPA2,NOME2,_,_,_),
                 format('~n ~w« ~w (~w) - (~w) ~w ~n',[NUM,NOME1,GOL1,GOL2,NOME2]),fail.
 
-listar_jogos_terminados:-format('~n-----------------------~n'),!.
+listar_jogos_terminados:-format('~n-----------------------~n'),
+                            pergunta("~n PRESSIONE [ENTER]~n",_),!.
 
 
 listar_jogadores_da_equipa(NUMERO_EQUIPA):-
@@ -527,8 +528,7 @@ listar_jogadores_da_equipa(NUMERO_EQUIPA):-
                                         jogador(COD,CAMISOLA,NOME,_,_,_,_,_,_,NUMERO_EQUIPA),
                                         format('~n~w ~w ~w',[COD,CAMISOLA,NOME]),fail.
                                         
-listar_jogadores_da_equipa(_):-format('~n-----------------------~n'),
-                                pergunta('~nDigite [Enter]~n',_),!.
+listar_jogadores_da_equipa(_):-format('~n-----------------------~n'),!.
                             
 
 ver_pontuacao:- equipa(_,NO,_,_,PON),
