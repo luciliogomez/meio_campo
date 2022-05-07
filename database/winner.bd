@@ -1,4 +1,4 @@
 :- dynamic winner/2.
 
-winner(1, 9).
+winner(0, 0).
 

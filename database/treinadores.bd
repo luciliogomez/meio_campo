@@ -1,7 +1,4 @@
 :- dynamic treinador/7.
 
-treinador(1, 'Tereza Dominguez', 29, 2, 56, f, 1).
-treinador(2, 'Bibi Filipe', 30, 2, 40, f, 3).
-treinador(3, 'Eli Zabeth', 40, 2, 1.67, f, 2).
-treinador(4, 'Isa Bellinha', 22, 2, 55, f, 4).
+
 

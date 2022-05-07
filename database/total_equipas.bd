@@ -1,4 +1,4 @@
 :- dynamic total_equipas/1.
 
-total_equipas(4).
+total_equipas(0).
 
