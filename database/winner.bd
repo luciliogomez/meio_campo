@@ -1,4 +1,4 @@
 :- dynamic winner/2.
-%winner(numero_team,pontos).
-winner(0, 0).
+
+winner(1, 3).
 

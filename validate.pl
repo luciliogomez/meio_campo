@@ -64,13 +64,13 @@ is_valid_team(_,_,_,_,R):-R is 1,!.
 % valida se a equipa existe
 is_valid_game(_,EQUIPA1,_,R):-team_exists(EQUIPA1,A),
                                         A \= 1,
-                                        format('~n --- FALHA: EQUIPA [~W] NÃO ENCONTRADA. --- ~n',[EQUIPA1]),
+                                        format('~n --- FALHA: EQUIPA  NÃO ENCONTRADA. --- ~n'),
                                         R is 0,!.
 
 % valida se a equipa existe
 is_valid_game(_,_,EQUIPA2,R):-team_exists(EQUIPA2,A),
                                         A \= 1,
-                                        format('~n --- FALHA: EQUIPA [~W] NÃO ENCONTRADA. --- ~n',[EQUIPA2]),
+                                        format('~n --- FALHA: EQUIPA  NÃO ENCONTRADA. --- ~n'),
                                         R is 0,!.
 
 % valida se sao a mesma equipa
@@ -126,3 +126,17 @@ team_has_players(_,R):-R is 0,!.
 % verifica se a equipa tem treinadores
 team_has_coach(TEAM,R):-equipa(TEAM,_,_,_,_), treinador(_,_,_,_,_,_,TEAM),R is 1,!.
 team_has_coach(_,R):-R is 0,!.
+
+
+%verifica se o campeonato ja terminou, se todos jogos marcados foram relizados
+is_campeonado_closed(R):- jornada(J),
+                        jogo(J,_,_,_,_,_,_,ES),
+                        ES = 0,
+                        format('~n~nCAMPEONATO AINDA NÃO ACABOU. ~nFALTAM JOGOS POR SE REALIZAR!!~n~n'),
+                        R is 0,!.
+is_campeonado_closed(R):- jornada(J),
+                        jogo(J,_,_,_,_,_,_,ES),
+                        ES = 1,
+                        format('~n~nCAMPEONATO AINDA NÃO ACABOU. ~nFALTAM JOGOS POR TERMINAR!!~n~n'),
+                        R is 0,!.
+is_campeonado_closed(R):- R is 1,!.

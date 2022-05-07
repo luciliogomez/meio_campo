@@ -1,12 +1,15 @@
 :- dynamic jogador/10.
 
-jogador(1, 10, 'Lucilio', 23, 1.65, 55, m, avancado, 0, 1).
-jogador(2, 10, 'Edson', 24, 1.7, 45, m, avancado, 0, 2).
 jogador(3, 12, 'Ludmilo', 24, 2, 40, m, 'meio campo', 0, 1).
-jogador(4, 9, 'Eliude', 22, 1.66, 67, m, central, 0, 1).
 jogador(5, 13, 'Yuri', 24, 1.89, 56, m, central, 0, 2).
 jogador(6, 11, 'Rogerio', 22, 1.4, 45, m, 'meio campo', 0, 2).
 jogador(7, 10, 'Jacinto', 25, 2, 56, m, avancado, 0, 3).
 jogador(8, 20, 'Bualala', 22, 1.78, 50, m, 'meio campo', 0, 3).
 jogador(9, 11, 'Val', 24, 1.77, 67, m, central, 0, 3).
+jogador(10, 14, 'Lussevadio', 25, 1.67, 65, m, avancado, 0, 4).
+jogador(11, 13, 'Leo Degas', 25, 1.67, 55, m, central, 0, 4).
+jogador(12, 15, 'Novais', 23, 1.45, 55, m, 'meio campo', 0, 4).
+jogador(1, 10, 'Lucilio', 23, 1.65, 55, m, avancado, 1, 1).
+jogador(4, 9, 'Eliude', 22, 1.66, 67, m, central, 2, 1).
+jogador(2, 10, 'Edson', 24, 1.7, 45, m, avancado, 2, 2).
 

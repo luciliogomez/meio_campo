@@ -1,4 +1,6 @@
 :- dynamic jornada/1.
-%jornada(numero).
 
+jornada(1).
+jornada(2).
+jornada(3).
 

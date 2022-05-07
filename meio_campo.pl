@@ -200,17 +200,6 @@ melhor_marcador:-
 
 melhor_marcador:-write('').
 
-is_campeonado_closed(R):- jornada(J),
-                        jogo(J,_,_,_,_,_,_,ES),
-                        ES = 0,
-                        format('~n~nCAMPEONATO AINDA NÃO ACABOU. ~nFALTAM JOGOS POR SE REALIZAR!!'),
-                        R is 0,!.
-is_campeonado_closed(R):- jornada(J),
-                        jogo(J,_,_,_,_,_,_,ES),
-                        ES = 1,
-                        format('~n~nCAMPEONATO AINDA NÃO ACABOU. ~nFALTAM JOGOS POR TERMINAR!!'),
-                        R is 0,!.
-is_campeonado_closed(R):- R is 1,!.
 
 
 main_menu:-
@@ -320,7 +309,8 @@ gamenow_menu_option(1,A):-format('~n *** INICIAR UM JOGO *** ~n'),
                 pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
 
-gamenow_menu_option(1,A):-format('~n FALHA AO INICIAR JOGO ~n'),A is 0,!.
+gamenow_menu_option(1,A):-format('~n FALHA AO INICIAR JOGO ~n'),
+                                pergunta("~n Pressione [Enter]",_),A is 0,!.
 
 
 gamenow_menu_option(3,A):-format('~n *** TERMINAR UM JOGO *** ~n'),
@@ -343,7 +333,8 @@ gamenow_menu_option(3,A):-format('~n *** TERMINAR UM JOGO *** ~n'),
                 pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
 
-gamenow_menu_option(3,A):-format('~n FALHA AO TERMINAR JOGO ~n'),A is 0,!.
+gamenow_menu_option(3,A):-format('~n FALHA AO TERMINAR JOGO ~n'),
+                                pergunta("~n Pressione [Enter]",_),A is 0,!.
 
 
 gamenow_menu_option(2,A):-format('~n *** ATRIBUIR GOLOS *** ~n'),
@@ -369,7 +360,8 @@ gamenow_menu_option(2,A):-format('~n *** ATRIBUIR GOLOS *** ~n'),
                 pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
 
-gamenow_menu_option(2,A):-format('~n FALHA AO ATRIBUIR GOLOS ~n'),A is 0,!.
+gamenow_menu_option(2,A):-format('~n FALHA AO ATRIBUIR GOLOS ~n'),
+                        pergunta("~n Pressione [Enter]",_),A is 0,!.
 
 buscaEquipa(NOME,E1,_,NUMERO):-equipa(E1,NOME,_,_,_),NUMERO is E1,!.
 buscaEquipa(NOME,_,E2,NUMERO):-equipa(E2,NOME,_,_,_),NUMERO is E2,!.
@@ -386,7 +378,7 @@ atribuirGolo(JORN,NUMJOGO,DATA,E1,GOL1,E2,GOL2,ESTADO,NUMEQUIPA,NUM_GOLS,R):-
 atribuirGolo(JORN,NUMJOGO,DATA,E1,GOL1,E2,GOL2,ESTADO,NUMEQUIPA,NUM_GOLS,R):-
                 NUMEQUIPA = E2,
                 jogo(JORN,NUMJOGO,DATA,E1,GOL1,E2,GOL2,ESTADO),
-                NUM_GOLOS is GOL1 + NUM_GOLS,
+                NUM_GOLOS is GOL2 + NUM_GOLS,
                 retract(jogo(JORN,NUMJOGO,DATA,E1,GOL1,E2,GOL2,ESTADO)),
                 assertz(jogo(JORN,NUMJOGO,DATA,E1,GOL1,E2,NUM_GOLOS,ESTADO)),
                 R is 1,!.
@@ -525,8 +517,8 @@ listar_jogos_terminados:-format('~n-----------------------~n'),
 listar_jogadores_da_equipa(NUMERO_EQUIPA):-
                                         equipa(NUMERO_EQUIPA,NOM,_,_,_),
                                         format('~n Jogadores da equipa ~w~n',[NOM]),
-                                        jogador(COD,CAMISOLA,NOME,_,_,_,_,_,_,NUMERO_EQUIPA),
-                                        format('~n~w ~w ~w',[COD,CAMISOLA,NOME]),fail.
+                                        jogador(COD,_,NOME,_,_,_,_,_,_,NUMERO_EQUIPA),
+                                        format('~n~w  ~w',[COD,NOME]),fail.
                                         
 listar_jogadores_da_equipa(_):-format('~n-----------------------~n'),!.
                             

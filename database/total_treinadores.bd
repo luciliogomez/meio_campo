@@ -1,4 +1,4 @@
 :- dynamic total_treinadores/1.
 
-total_treinadores(2).
+total_treinadores(4).
 
