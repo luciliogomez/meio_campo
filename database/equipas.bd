@@ -1,7 +1,7 @@
 :- dynamic equipa/5.
 
-equipa(numero, nome_da_equipa, 123, 33, 0).
-equipa(3, 'REAL', 1, 2, 1).
-equipa(2, 'BARCELONA', '12/12/2022', 5, 1).
-equipa(1, 'PSG', '12/12/2022', 2, 2).
+equipa(1, 'REAL', '12/12/1999', 2, 0).
+equipa(2, 'BARCELONA', '13/5/1987', 3, 0).
+equipa(3, 'PSG', '2/1/2000', 1, 0).
+equipa(4, 'ARSENAL', '30/8/1988', 2, 0).
 

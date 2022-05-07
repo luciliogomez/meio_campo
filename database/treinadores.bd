@@ -1,5 +1,4 @@
 :- dynamic treinador/7.
+%treinador(numero,nome,idade,altura,peso,sexo,equipa).
 
-treinador(2, 'LIBERNA', 45, 3, 34, 'M', 3).
-treinador(1, 'MAURO', 44, 2, 44, 'M', 1).
 

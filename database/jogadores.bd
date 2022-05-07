@@ -1,6 +1,6 @@
 :- dynamic jogador/10.
 
-jogador(1, 10, 'JOAO', 22, 22, 22, 'M', 'A', 2, 1).
-jogador(1, 3, 'Mel', 33, 3, 33, m, e, 0, 1).
-jogador(1, 44, 'KILE', 33, 3, 3, 'M', 'E', 0, 1).
+%jogador(NUMERO,CAMISOLA,NOME,IDADE,ALTURA,PESO,GENERO,POSICAO,0,NUMERO_TEAM).
+%
+
 

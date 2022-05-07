@@ -1,4 +1,5 @@
 :- dynamic best/3.
 
-best(1, 'JOAO', 2).
+%best(team, player, gols).
+best(0, player, 0).
 

@@ -1,6 +1,6 @@
 :- dynamic jogo/8.
 
-jogo(jornada, numero, data, equipa1, golos1, equipa2, golos2, estado).
-jogo(1, 2, 2, 1, 0, 3, 0, 2).
+%jogo(jornada, numero, data, equipa1, golos1, equipa2, golos2, estado).
+
 
 

@@ -55,8 +55,8 @@ team_menu_option(1,A):-format('~n *** CADASTRAR EQUIPA *** ~n'),
                 retract(total_equipas(TOTAL)),
                 assertz(total_equipas(N)),
                 format('~n ---  EQUIPA ADICIONADA --- ~n'),
-                salva(equipa,'equipas.bd'),
-                salva(total_equipas,'total_equipas.bd'),
+                salva(equipa,'database/equipas.bd'),
+                salva(total_equipas,'database/total_equipas.bd'),
                 pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
 team_menu_option(1,A):-
@@ -82,8 +82,8 @@ team_menu_option(2,A):-format('~n *** CADASTRAR JOGADOR *** ~n'),
                 format('~n ---  JOGADOR ADICIONADO --- ~n'),
                 retract(total_jogadores(TOTAL)),
                 assertz(total_jogadores(NUMERO_PLAYER)),
-                salva(jogador,'jogadores.bd'),
-                salva(total_jogadores,'total_jogadores.bd'),
+                salva(jogador,'database/jogadores.bd'),
+                salva(total_jogadores,'database/total_jogadores.bd'),
                 pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
 
@@ -105,8 +105,8 @@ team_menu_option(3,A):-format('~n *** CADASTRAR TREINADOR *** ~n'),
                 format('~n ---  TREINADOR ADICIONADO --- ~n'),
                 retract(total_treinadores(TOTAL)),
                 assertz(total_treinadores(NUMERO_TREINADOR)),
-                salva(treinador,'treinadores.bd'),
-                salva(total_treinadores,'total_treinadores.bd'),
+                salva(treinador,'database/treinadores.bd'),
+                salva(total_treinadores,'database/total_treinadores.bd'),
                 pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
 
@@ -160,6 +160,7 @@ statistics_menu:-
 statistics_menu_option(0,1):-!.
 statistics_menu_option(1,A):-format('~n*** TABELA CLASSIFICATIVA ***~n'), 
                             ver_pontuacao,
+                            pergunta('~nDigite [Enter]~n',_),
                             A is 0,!.
 
 statistics_menu_option(2,A):-format('~n*** VENCEDOR DO CAMPEONATO ***~n'), 
@@ -184,6 +185,10 @@ statistics_menu_option(3,A):-format('~n*** MELHOR MARCADOR ***~n'),
                             pergunta('~nDigite [Enter]~n',_),
                             A is 0,!.
 
+statistics_menu_option(3,A):- 
+                            pergunta('~nDigite [Enter]~n',_),
+                            A is 0,!.
+
 
 melhor_marcador:-
                 jogador(_,_,NO,_,_,_,_,_,GOLOS,EQUIPA),
@@ -191,7 +196,7 @@ melhor_marcador:-
                 GOLOS > B_GOL,
                 retract(best(B_EQ,B_JOGADOR,B_GOL)),
                 assertz(best(EQUIPA,NO,GOLOS)),
-                salva(best,'best.bd').
+                salva(best,'database/best.bd').
 
 melhor_marcador:-write('').
 
@@ -239,8 +244,8 @@ game_menu_option(1,A):-format('~n *** ADICIONAR JORNADA *** ~n'),
                 atualiza_total_jornadas(TOTAL),
                 adicionar_jornada(TOTAL),
                 format('~n ---  JORNADA ADICIONADA --- ~n'),
-                salva(total_jornadas,'total_jornadas.bd'),
-                salva(jornada,'jornadas.bd'),
+                salva(total_jornadas,'database/total_jornadas.bd'),
+                salva(jornada,'database/jornadas.bd'),
                 pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
 
@@ -262,8 +267,8 @@ game_menu_option(2,A):-format('~n *** ADICIONAR JOGO *** ~n'),
                 atualiza_total_jogos(TOTAL),
                 assertz(jogo(JORNADA,NUMERO_DO_JOGO,DATA_JOGO,EQUIPA1,0,EQUIPA2,0,0)),
                 format('~n ---  JOGO MARCADO --- ~n'),
-                salva(total_jogos,'total_jogos.bd'),
-                salva(jogo,'jogos.bd'),
+                salva(total_jogos,'database/total_jogos.bd'),
+                salva(jogo,'database/jogos.bd'),
                 pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
 
@@ -311,7 +316,7 @@ gamenow_menu_option(1,A):-format('~n *** INICIAR UM JOGO *** ~n'),
                 retract(jogo(JORNADA,NUMERO_DO_JOGO,DATA,EQUIPA1,GOLOS1,EQUIPA2,GOLOS2,ESTADO)),
                 assertz(jogo(JORNADA,NUMERO_DO_JOGO,DATA,EQUIPA1,GOLOS1,EQUIPA2,GOLOS2,1)),
                 format('~n ---  JOGO INICIADO --- ~n'),
-                salva(jogo,'jogos.bd'),
+                salva(jogo,'database/jogos.bd'),
                 pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
 
@@ -332,9 +337,9 @@ gamenow_menu_option(3,A):-format('~n *** TERMINAR UM JOGO *** ~n'),
                 format('~n» ~w ~w : ~w ~w «~n',[NOME1,GOLOS1,GOLOS2,NOME2]),
                 atribuir_pontuacao(EQUIPA1,GOLOS1,EQUIPA2,GOLOS2,R),
                 R = 1,
-                salva(jogo,'jogos.bd'),
-                salva(equipa,'equipas.bd'),
-                salva(winner,'winner.bd'),
+                salva(jogo,'database/jogos.bd'),
+                salva(equipa,'database/equipas.bd'),
+                salva(winner,'database/winner.bd'),
                 pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
 
@@ -359,8 +364,8 @@ gamenow_menu_option(2,A):-format('~n *** ATRIBUIR GOLOS *** ~n'),
                 retract(jogador(NUMERO_DO_JOGADOR,CAMISOLA,NOME_DO_JOGADOR,ALT,PES,GEN,IDA,POS,GOLS,NUMERO_EQUIPA)),
                 assertz(jogador(NUMERO_DO_JOGADOR,CAMISOLA,NOME_DO_JOGADOR,ALT,PES,GEN,IDA,POS,QTD_GOLS,NUMERO_EQUIPA)),
                 format('~n ---  CONCLUIDO --- ~n'),
-                salva(jogo,'jogos.bd'),
-                salva(jogador,'jogadores.bd'),
+                salva(jogo,'database/jogos.bd'),
+                salva(jogador,'database/jogadores.bd'),
                 pergunta("~n Pressione [Enter]",_),
                 A is 0,!.
 
@@ -529,8 +534,7 @@ listar_jogadores_da_equipa(_):-format('~n-----------------------~n'),
 ver_pontuacao:- equipa(_,NO,_,_,PON),
                 format('~n » ~w : ~w pts ~n',[NO,PON]),fail.
 
-ver_pontuacao:- format('~n-------------~n'),
-                pergunta("Digite [Enter]",_),!.
+ver_pontuacao:- format('~n-------------~n'),!.
 
 
 
