@@ -1,4 +1,4 @@
 :- dynamic best/3.
 
-best(1, 'Eliude', 2).
+best(1, 'Lucilio', 4).
 
